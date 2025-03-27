@@ -187,7 +187,7 @@ class TodoViewMenu extends StatelessWidget {
         minVerticalPadding: 0,
         contentPadding: EdgeInsets.zero,
         title: Text(
-          content!,
+          content,
           style: text.labelLarge?.copyWith(
             color: enabled ? scheme.onSurface : Theme.of(context).disabledColor,
           ),

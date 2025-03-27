@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:brotli/brotli.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:hung/app/app.locator.dart';
@@ -177,17 +178,23 @@ class ArticleViewModel extends ReactiveViewModel {
           final jsonResponse = jsonDecode(decodedString);
           // if (jsonResponse['zhprompts'] != null)
           //   print(jsonResponse['zhprompts']);
-          print(jsonResponse);
+          if (kDebugMode) {
+            print(jsonResponse);
+          }
           // // 访问 prompts 列表
           if (usureTotranslate) {
             _categories =
                 List<String>.from(jsonResponse['zhprompts']); //此刻保留中文文本
-            print(_categories);
+            if (kDebugMode) {
+              print(_categories);
+            }
             // 清空 _encategories 并赋予新值
             _encategories.clear();
             _encategories
                 .addAll(List<String>.from(jsonResponse['prompts'])); //此刻保留英文文本
-            print(_encategories);
+            if (kDebugMode) {
+              print(_encategories);
+            }
           } else {
             _categories = List<dynamic>.from(jsonResponse['prompts']);
           }
@@ -197,12 +204,16 @@ class ArticleViewModel extends ReactiveViewModel {
           return false;
         }
       } else {
-        print('Failed to send request: ${response.statusCode}');
+        if (kDebugMode) {
+          print('Failed to send request: ${response.statusCode}');
+        }
         return false;
       }
       // _isfetching = false;
     } catch (e) {
-      print('Error: $e');
+      if (kDebugMode) {
+        print('Error: $e');
+      }
       return false;
     }
   }
@@ -241,15 +252,23 @@ class ArticleViewModel extends ReactiveViewModel {
             utf8.decode(response.bodyBytes, allowMalformed: true);
         final Map<String, dynamic> mediaInfoMap =
             Map<String, dynamic>.from(jsonDecode(decodedBytes));
-        print(mediaInfoMap);
+        if (kDebugMode) {
+          print(mediaInfoMap);
+        }
 
         _twoPagesfetchDataFirst = mediaInfoMap;
-        print('获取数据成功');
+        if (kDebugMode) {
+          print('获取数据成功');
+        }
       } else {
-        print('响应失败 ${response.statusCode}');
+        if (kDebugMode) {
+          print('响应失败 ${response.statusCode}');
+        }
       }
     } catch (e) {
-      print('Error fetching data: $e');
+      if (kDebugMode) {
+        print('Error fetching data: $e');
+      }
     }
     notifyListeners();
   }
@@ -282,12 +301,18 @@ class ArticleViewModel extends ReactiveViewModel {
         _twoPagesfetchDataSecond =
             await jsonCacheMem.value('freeMediumfetchData');
         notifyListeners();
-        print('推荐消息加载成功');
+        if (kDebugMode) {
+          print('推荐消息加载成功');
+        }
       } else {
-        print('加载数据失败: ${response.statusCode}');
+        if (kDebugMode) {
+          print('加载数据失败: ${response.statusCode}');
+        }
       }
     } catch (e) {
-      print('加载数据失败: $e');
+      if (kDebugMode) {
+        print('加载数据失败: $e');
+      }
     }
   }
 
@@ -400,7 +425,9 @@ class ArticleViewModel extends ReactiveViewModel {
 
   @override
   ArticleViewModel() {
-    print('初始化 ArticleViewModel');
+    if (kDebugMode) {
+      print('初始化 ArticleViewModel');
+    }
     _ArticalfocusNode.unfocus();
     fetchData();
     freeMediumfetchData();

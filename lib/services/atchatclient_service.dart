@@ -58,7 +58,9 @@ class AtchatclientService with ListenableServiceMixin {
 
     // 文件已存在，直接返回路径
     if (await file.exists()) {
-      print('文件已存在，直接使用');
+      if (kDebugMode) {
+        print('文件已存在，直接使用');
+      }
       return localPath;
     }
 
@@ -67,10 +69,14 @@ class AtchatclientService with ListenableServiceMixin {
       final byteData = await rootBundle.load('assets/keys/$atsignFile');
       final buffer = byteData.buffer.asUint8List();
       await file.writeAsBytes(buffer);
-      print('文件已写入：$localPath');
+      if (kDebugMode) {
+        print('文件已写入：$localPath');
+      }
       return localPath;
     } catch (e) {
-      print('加载并写入文件失败: $e');
+      if (kDebugMode) {
+        print('加载并写入文件失败: $e');
+      }
       throw Exception('无法加载文件');
     }
   }
@@ -78,7 +84,7 @@ class AtchatclientService with ListenableServiceMixin {
   late bool _uonboarded = false;
   bool get uonboarded => _uonboarded;
 
-  StreamSubscription? subscription = null;
+  StreamSubscription? uuusubscription;
 
   /// 监听消息变化
   final ValueNotifier<String?> recievemessage =
@@ -88,7 +94,9 @@ class AtchatclientService with ListenableServiceMixin {
   Future<void> atauthenticateUser(BuildContext context) async {
     await requestStoragePermission();
     if (_uonboarded) {
-      print('已经认证过了');
+      if (kDebugMode) {
+        print('已经认证过了');
+      }
       await atchatTalk('🎉🎉', context);
     } else {
       await authenticateUser(context);
@@ -99,7 +107,7 @@ class AtchatclientService with ListenableServiceMixin {
   Future<bool> atchatTalk(String? input, BuildContext context) async {
     bool result = false;
     if (_uonboarded) {
-      result = await atTalk(subscription, input, recievemessage, context);
+      result = await atTalk(uuusubscription, input, recievemessage, context);
     }
     notifyListeners();
     return result;
@@ -140,21 +148,31 @@ class AtchatclientService with ListenableServiceMixin {
     // }
     Duration retryDuration = const Duration(seconds: 2);
     while (!_uonboarded) {
-      print('Authenticating ... $_uonboarded');
+      if (kDebugMode) {
+        print('Authenticating ... $_uonboarded');
+      }
       try {
-        print('Connecting ... ');
+        if (kDebugMode) {
+          print('Connecting ... ');
+        }
         await Future.delayed(const Duration(milliseconds: 1000));
         _uonboarded = await onboardingService.authenticate();
       } catch (exception, stackTrace) {
-        print('Error: $exception');
-        print('Stack trace:\n$stackTrace');
+        if (kDebugMode) {
+          print('Error: $exception');
+        }
+        if (kDebugMode) {
+          print('Stack trace:\n$stackTrace');
+        }
       }
 
       if (!uonboarded) {
         await Future.delayed(retryDuration);
       }
     }
-    print('Authenticated $_uonboarded');
+    if (kDebugMode) {
+      print('Authenticated $_uonboarded');
+    }
     await atchatTalk('111💖💖💖🎉🎉', context);
     notifyListeners();
   }
@@ -171,8 +189,8 @@ class AtchatclientService with ListenableServiceMixin {
     AtClient atClient = AtClientManager.getInstance().atClient;
 
     // Subscribe to the notifications only once (outside atTalk)
-    if (this.subscription == null) {
-      this.subscription = atClient.notificationService
+    if (subscription == null) {
+      subscription = atClient.notificationService
           .subscribe(regex: 'attalk.$nameSpace@', shouldDecrypt: true)
           .listen(
         ((notification) async {
@@ -199,7 +217,7 @@ class AtchatclientService with ListenableServiceMixin {
         onDone: () => logger.info('Notification listener stopped'),
       );
     } else {
-      this.subscription!.resume();
+      subscription.resume();
     }
     bool success = await sendMessage(
       fromAtsign,

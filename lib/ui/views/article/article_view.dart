@@ -180,7 +180,7 @@ class ArticleView extends StackedView<ArticleViewModel> {
                                                           .avatarImagePathValue ==
                                                       null
                                                   ? Image.asset(
-                                                      'images/dev.png',
+                                                      'images/uu9.jpg',
                                                       width: 60.0,
                                                       height: 60.0,
                                                       fit: BoxFit.cover,

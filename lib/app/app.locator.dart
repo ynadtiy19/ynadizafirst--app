@@ -12,6 +12,7 @@ import 'package:stacked_services/src/navigation/navigation_service.dart';
 import 'package:stacked_shared/stacked_shared.dart';
 
 import '../services/atchatclient_service.dart';
+import '../services/authentication_service.dart';
 import '../services/gemini_services_service.dart';
 import '../services/image_repository_service.dart';
 import '../services/select_img_favo_service.dart';
@@ -34,4 +35,5 @@ Future<void> setupLocator({
   locator.registerLazySingleton(() => ImageRepositoryService());
   locator.registerLazySingleton(() => SelectImgFavoService());
   locator.registerLazySingleton(() => AtchatclientService());
+  locator.registerLazySingleton(() => AuthenticationService());
 }

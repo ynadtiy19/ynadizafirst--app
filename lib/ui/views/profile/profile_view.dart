@@ -3,6 +3,7 @@ import 'package:fast_cached_network_image/fast_cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gpt_markdown/gpt_markdown.dart';
+import 'package:hung/ui/views/pinterest/pinterest_view.dart';
 import 'package:lottie/lottie.dart';
 import 'package:stacked/stacked.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -11,7 +12,6 @@ import '../../utils/hero-icons-outline_icons.dart';
 import '../../webviewsite/ynadtiy19.dart';
 import '../../widgets/common/fullscreen/fullscreen_image_viewer.dart';
 import '../../widgets/common/popmenu/gptdropdown.dart';
-import '../../widgets/common/sider_bar_page/sider_bar_page.dart';
 import 'profile_viewmodel.dart';
 
 class ProfileView extends StackedView<ProfileViewModel> {
@@ -41,27 +41,16 @@ class ProfileView extends StackedView<ProfileViewModel> {
         await viewModel.profileImageFetch(10);
       },
       child: Scaffold(
-        key: viewModel.scaffoldKey,
         extendBodyBehindAppBar: false,
         backgroundColor: const Color.fromARGB(100, 255, 219, 205),
-        drawer: const Drawer(
-          child: Tooltip(message: '侧边栏', child: SiderBarPage()),
-        ),
         body: Column(
           children: [
             const SizedBox(height: 40),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  IconButton(
-                    icon: const Icon(
-                        Hero_icons_outline.bars_3_bottom_left), // 设置自定义图标
-                    onPressed: () {
-                      viewModel.scaffoldKey.currentState?.openDrawer(); // 打开侧边栏
-                    },
-                  ),
                   Row(
                     children: [
                       Padding(
@@ -140,274 +129,351 @@ class ProfileView extends StackedView<ProfileViewModel> {
               ),
             ),
             const SizedBox(height: 5),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 5),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 4.0),
-                    child: Ink(
-                      decoration: const BoxDecoration(
-                        color: Color.fromARGB(255, 255, 219, 205),
-                        borderRadius: BorderRadius.all(Radius.circular(12)),
-                      ),
-                      child: Material(
-                        color: Colors.transparent,
-                        child: InkWell(
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(12)),
-                          onTap: () {
-                            // 处理点击事件
-                            print('Button tapped');
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Tooltip(
-                              message: '美食',
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Container(
-                                    width: 25, // 圆形容器的宽度
-                                    height: 25, // 圆形容器的高度
-                                    decoration: const BoxDecoration(
-                                      color: Color.fromARGB(
-                                          170, 206, 96, 96), // 背景颜色
-                                      shape: BoxShape.circle, // 圆形
-                                    ),
-                                    child: const Center(
-                                      child: Icon(
-                                        Hero_icons_outline.cake, // 图标
-                                        size: 18, // 图标大小
-                                        color: Colors.black87, // 图标颜色
-                                      ),
-                                    ),
-                                  ),
-                                  const Text(
-                                    '美食',
-                                    style: TextStyle(
-                                      color: Colors.black87,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 4.0),
-                    child: Ink(
-                      decoration: const BoxDecoration(
-                        color: Color.fromARGB(255, 255, 219, 205),
-                        borderRadius: BorderRadius.all(Radius.circular(12)),
-                      ),
-                      child: Material(
-                        color: Colors.transparent,
-                        child: InkWell(
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(12)),
-                          onTap: () {
-                            // 处理点击事件
-                            print('Button tapped');
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Tooltip(
-                              message: '动物',
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Container(
-                                    width: 25, // 圆形容器的宽度
-                                    height: 25, // 圆形容器的高度
-                                    decoration: const BoxDecoration(
-                                      color: Color.fromARGB(
-                                          245, 245, 181, 45), // 背景颜色
-                                      shape: BoxShape.circle, // 圆形
-                                    ),
-                                    child: const Icon(
-                                      textDirection: TextDirection.ltr,
-                                      weight: 50,
-                                      size: 18,
-                                      Icons.pets,
-                                      color: Colors.black87,
-                                    ),
-                                  ),
-                                  const Text(
-                                    '动物',
-                                    style: TextStyle(
-                                      color: Colors.black87,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 4.0),
-                    child: Ink(
-                      decoration: const BoxDecoration(
-                        color: Color.fromARGB(255, 255, 219, 205),
-                        borderRadius: BorderRadius.all(Radius.circular(12)),
-                      ),
-                      child: Material(
-                        color: Colors.transparent,
-                        child: InkWell(
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(12)),
-                          onTap: () {
-                            // 处理点击事件
-                            print('Button tapped');
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Tooltip(
-                              message: '旅行',
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Container(
-                                    width: 25, // 圆形容器的宽度
-                                    height: 25, // 圆形容器的高度
-                                    decoration: const BoxDecoration(
-                                      color: Color.fromARGB(
-                                          245, 196, 208, 208), // 背景颜色
-                                      shape: BoxShape.circle, // 圆形
-                                    ),
-                                    child: const Icon(
-                                      textDirection: TextDirection.ltr,
-                                      weight: 50,
-                                      size: 18,
-                                      Hero_icons_outline.truck,
-                                      color: Colors.black87,
-                                    ),
-                                  ),
-                                  const Text(
-                                    '旅行',
-                                    style: TextStyle(
-                                      color: Colors.black87,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 4.0),
-                    child: Ink(
-                      decoration: const BoxDecoration(
-                        color: Color.fromARGB(255, 255, 219, 205),
-                        borderRadius: BorderRadius.all(Radius.circular(12)),
-                      ),
-                      child: Material(
-                        color: Colors.transparent,
-                        child: InkWell(
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(12)),
-                          onTap: () {
-                            // 处理点击事件
-                            print('Button tapped');
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Tooltip(
-                              message: '家乡的风景画',
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Container(
-                                    width: 25, // 圆形容器的宽度
-                                    height: 25, // 圆形容器的高度
-                                    decoration: const BoxDecoration(
-                                      color: Color.fromARGB(
-                                          245, 225, 190, 231), // 背景颜色
-                                      shape: BoxShape.circle, // 圆形
-                                    ),
-                                    child: const Icon(
-                                      textDirection: TextDirection.ltr,
-                                      weight: 50,
-                                      size: 18,
-                                      Hero_icons_outline.gift,
-                                      color: Colors.black87,
-                                    ),
-                                  ),
-                                  const Text(
-                                    '家乡',
-                                    style: TextStyle(
-                                      color: Colors.black87,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+            StatefulBuilder(
+              builder: (context, setState) {
+                return NavigationButtons(
+                  buttonConfigs: viewModel.buttonConfig,
+                  onButtonTap: (index) {
+                    setState(() {
+                      viewModel.onTabChangeprofile(index);
+                    });
+                    print('Button $index tapped');
+                  },
+                );
+              },
             ),
+            // Padding(
+            //   padding: const EdgeInsets.only(bottom: 5),
+            //   child: Row(
+            //     mainAxisAlignment: MainAxisAlignment.center,
+            //     children: [
+            //       Padding(
+            //         padding: const EdgeInsets.only(left: 4.0),
+            //         child: Ink(
+            //           decoration: const BoxDecoration(
+            //             color: Color.fromARGB(255, 255, 219, 205),
+            //             borderRadius: BorderRadius.all(Radius.circular(12)),
+            //           ),
+            //           child: Material(
+            //             color: Colors.transparent,
+            //             child: InkWell(
+            //               borderRadius:
+            //                   const BorderRadius.all(Radius.circular(12)),
+            //               onTap: () {
+            //                 // 处理点击事件
+            //                 print('Button tapped');
+            //               },
+            //               child: Padding(
+            //                 padding: const EdgeInsets.all(8.0),
+            //                 child: Tooltip(
+            //                   message: 'pinterestImg',
+            //                   child: Row(
+            //                     mainAxisAlignment: MainAxisAlignment.center,
+            //                     children: [
+            //                       Container(
+            //                         width: 25, // 圆形容器的宽度
+            //                         height: 25, // 圆形容器的高度
+            //                         decoration: const BoxDecoration(
+            //                           color: Color.fromARGB(
+            //                               170, 206, 96, 96), // 背景颜色
+            //                           shape: BoxShape.circle, // 圆形
+            //                         ),
+            //                         child: const Center(
+            //                           child: Icon(
+            //                             Hero_icons_outline.cake, // 图标
+            //                             size: 18, // 图标大小
+            //                             color: Colors.black87, // 图标颜色
+            //                           ),
+            //                         ),
+            //                       ),
+            //                       const Text(
+            //                         '气息',
+            //                         style: TextStyle(
+            //                           color: Colors.black87,
+            //                           fontWeight: FontWeight.bold,
+            //                         ),
+            //                       )
+            //                     ],
+            //                   ),
+            //                 ),
+            //               ),
+            //             ),
+            //           ),
+            //         ),
+            //       ),
+            //       Padding(
+            //         padding: const EdgeInsets.only(left: 4.0),
+            //         child: Ink(
+            //           decoration: const BoxDecoration(
+            //             color: Color.fromARGB(255, 255, 219, 205),
+            //             borderRadius: BorderRadius.all(Radius.circular(12)),
+            //           ),
+            //           child: Material(
+            //             color: Colors.transparent,
+            //             child: InkWell(
+            //               borderRadius:
+            //                   const BorderRadius.all(Radius.circular(12)),
+            //               onTap: () {
+            //                 // 处理点击事件
+            //                 print('Button tapped');
+            //               },
+            //               child: Padding(
+            //                 padding: const EdgeInsets.all(8.0),
+            //                 child: Tooltip(
+            //                   message: '美食',
+            //                   child: Row(
+            //                     mainAxisAlignment: MainAxisAlignment.center,
+            //                     children: [
+            //                       Container(
+            //                         width: 25, // 圆形容器的宽度
+            //                         height: 25, // 圆形容器的高度
+            //                         decoration: const BoxDecoration(
+            //                           color: Color.fromARGB(
+            //                               170, 206, 96, 96), // 背景颜色
+            //                           shape: BoxShape.circle, // 圆形
+            //                         ),
+            //                         child: const Center(
+            //                           child: Icon(
+            //                             Hero_icons_outline.cake, // 图标
+            //                             size: 18, // 图标大小
+            //                             color: Colors.black87, // 图标颜色
+            //                           ),
+            //                         ),
+            //                       ),
+            //                       const Text(
+            //                         '美食',
+            //                         style: TextStyle(
+            //                           color: Colors.black87,
+            //                           fontWeight: FontWeight.bold,
+            //                         ),
+            //                       )
+            //                     ],
+            //                   ),
+            //                 ),
+            //               ),
+            //             ),
+            //           ),
+            //         ),
+            //       ),
+            //       Padding(
+            //         padding: const EdgeInsets.only(left: 4.0),
+            //         child: Ink(
+            //           decoration: const BoxDecoration(
+            //             color: Color.fromARGB(255, 255, 219, 205),
+            //             borderRadius: BorderRadius.all(Radius.circular(12)),
+            //           ),
+            //           child: Material(
+            //             color: Colors.transparent,
+            //             child: InkWell(
+            //               borderRadius:
+            //                   const BorderRadius.all(Radius.circular(12)),
+            //               onTap: () {
+            //                 // 处理点击事件
+            //                 print('Button tapped');
+            //               },
+            //               child: Padding(
+            //                 padding: const EdgeInsets.all(8.0),
+            //                 child: Tooltip(
+            //                   message: '动物',
+            //                   child: Row(
+            //                     mainAxisAlignment: MainAxisAlignment.center,
+            //                     children: [
+            //                       Container(
+            //                         width: 25, // 圆形容器的宽度
+            //                         height: 25, // 圆形容器的高度
+            //                         decoration: const BoxDecoration(
+            //                           color: Color.fromARGB(
+            //                               245, 245, 181, 45), // 背景颜色
+            //                           shape: BoxShape.circle, // 圆形
+            //                         ),
+            //                         child: const Icon(
+            //                           textDirection: TextDirection.ltr,
+            //                           weight: 50,
+            //                           size: 18,
+            //                           Icons.pets,
+            //                           color: Colors.black87,
+            //                         ),
+            //                       ),
+            //                       const Text(
+            //                         '动物',
+            //                         style: TextStyle(
+            //                           color: Colors.black87,
+            //                           fontWeight: FontWeight.bold,
+            //                         ),
+            //                       )
+            //                     ],
+            //                   ),
+            //                 ),
+            //               ),
+            //             ),
+            //           ),
+            //         ),
+            //       ),
+            //       Padding(
+            //         padding: const EdgeInsets.only(left: 4.0),
+            //         child: Ink(
+            //           decoration: const BoxDecoration(
+            //             color: Color.fromARGB(255, 255, 219, 205),
+            //             borderRadius: BorderRadius.all(Radius.circular(12)),
+            //           ),
+            //           child: Material(
+            //             color: Colors.transparent,
+            //             child: InkWell(
+            //               borderRadius:
+            //                   const BorderRadius.all(Radius.circular(12)),
+            //               onTap: () {
+            //                 // 处理点击事件
+            //                 print('Button tapped');
+            //               },
+            //               child: Padding(
+            //                 padding: const EdgeInsets.all(8.0),
+            //                 child: Tooltip(
+            //                   message: '旅行',
+            //                   child: Row(
+            //                     mainAxisAlignment: MainAxisAlignment.center,
+            //                     children: [
+            //                       Container(
+            //                         width: 25, // 圆形容器的宽度
+            //                         height: 25, // 圆形容器的高度
+            //                         decoration: const BoxDecoration(
+            //                           color: Color.fromARGB(
+            //                               245, 196, 208, 208), // 背景颜色
+            //                           shape: BoxShape.circle, // 圆形
+            //                         ),
+            //                         child: const Icon(
+            //                           textDirection: TextDirection.ltr,
+            //                           weight: 50,
+            //                           size: 18,
+            //                           Hero_icons_outline.truck,
+            //                           color: Colors.black87,
+            //                         ),
+            //                       ),
+            //                       const Text(
+            //                         '旅行',
+            //                         style: TextStyle(
+            //                           color: Colors.black87,
+            //                           fontWeight: FontWeight.bold,
+            //                         ),
+            //                       )
+            //                     ],
+            //                   ),
+            //                 ),
+            //               ),
+            //             ),
+            //           ),
+            //         ),
+            //       ),
+            //       Padding(
+            //         padding: const EdgeInsets.only(left: 4.0),
+            //         child: Ink(
+            //           decoration: const BoxDecoration(
+            //             color: Color.fromARGB(255, 255, 219, 205),
+            //             borderRadius: BorderRadius.all(Radius.circular(12)),
+            //           ),
+            //           child: Material(
+            //             color: Colors.transparent,
+            //             child: InkWell(
+            //               borderRadius:
+            //                   const BorderRadius.all(Radius.circular(12)),
+            //               onTap: () {
+            //                 // 处理点击事件
+            //                 print('Button tapped');
+            //               },
+            //               child: Padding(
+            //                 padding: const EdgeInsets.all(8.0),
+            //                 child: Tooltip(
+            //                   message: '家乡的风景画',
+            //                   child: Row(
+            //                     mainAxisAlignment: MainAxisAlignment.center,
+            //                     children: [
+            //                       Container(
+            //                         width: 25, // 圆形容器的宽度
+            //                         height: 25, // 圆形容器的高度
+            //                         decoration: const BoxDecoration(
+            //                           color: Color.fromARGB(
+            //                               245, 225, 190, 231), // 背景颜色
+            //                           shape: BoxShape.circle, // 圆形
+            //                         ),
+            //                         child: const Icon(
+            //                           textDirection: TextDirection.ltr,
+            //                           weight: 50,
+            //                           size: 18,
+            //                           Hero_icons_outline.gift,
+            //                           color: Colors.black87,
+            //                         ),
+            //                       ),
+            //                       const Text(
+            //                         '家乡',
+            //                         style: TextStyle(
+            //                           color: Colors.black87,
+            //                           fontWeight: FontWeight.bold,
+            //                         ),
+            //                       )
+            //                     ],
+            //                   ),
+            //                 ),
+            //               ),
+            //             ),
+            //           ),
+            //         ),
+            //       ),
+            //     ],
+            //   ),
+            // ),
             Container(
               height: 1.5,
               color: Colors.brown.shade300,
             ),
             Expanded(
-              child: FutureBuilder<Map<String, dynamic>?>(
-                future: viewModel.jsonCacheKey.value('uuuprofile'),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(
-                        child: CircularProgressIndicator(color: Colors.green));
-                  } else if (snapshot.hasError) {
-                    return Center(child: Text('错误: ${snapshot.error}'));
-                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return const Center(
-                      child: Text(
-                        '照片数据正在制作中 ...',
-                        style: TextStyle(color: Colors.black, fontSize: 20),
-                      ),
-                    );
-                  }
+              child: IndexedStack(
+                index: viewModel.selectedIndex,
+                children: <Widget>[
+                  const PinterestView(),
+                  FutureBuilder<Map<String, dynamic>?>(
+                    future: viewModel.jsonCacheKey.value('uuuprofile'),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(
+                            child:
+                                CircularProgressIndicator(color: Colors.green));
+                      } else if (snapshot.hasError) {
+                        return Center(child: Text('错误: ${snapshot.error}'));
+                      } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                        return const Center(
+                          child: Text(
+                            '照片数据正在制作中 ...',
+                            style: TextStyle(color: Colors.black, fontSize: 20),
+                          ),
+                        );
+                      }
 
-                  final imageData = snapshot.data!;
+                      final imageData = snapshot.data!;
 
-                  return GridView.builder(
-                    physics: const AlwaysScrollableScrollPhysics(),
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 1,
-                      mainAxisSpacing: 4.0,
-                      crossAxisSpacing: 4.0,
-                      childAspectRatio: 0.680,
-                    ),
-                    itemCount: imageData.length,
-                    itemBuilder: (context, index) {
-                      return ImageCardWidget(
-                        context: context,
-                        viewModel: viewModel,
-                        imageData: imageData,
-                        index: index,
+                      return GridView.builder(
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 1,
+                          mainAxisSpacing: 4.0,
+                          crossAxisSpacing: 4.0,
+                          childAspectRatio: 0.680,
+                        ),
+                        itemCount: imageData.length,
+                        itemBuilder: (context, index) {
+                          return ImageCardWidget(
+                            context: context,
+                            viewModel: viewModel,
+                            imageData: imageData,
+                            index: index,
+                          );
+                        },
                       );
                     },
-                  );
-                },
+                  ),
+                  const Center(child: Text('3')),
+                  const Center(child: Text('4')),
+                  const Center(child: Text('5')),
+                ],
               ),
             ),
           ],
@@ -421,6 +487,81 @@ class ProfileView extends StackedView<ProfileViewModel> {
     BuildContext context,
   ) =>
       ProfileViewModel();
+}
+
+class NavigationButtons extends StatelessWidget {
+  final List<Map<String, dynamic>> buttonConfigs;
+  final Function(int) onButtonTap;
+
+  const NavigationButtons({
+    super.key,
+    required this.buttonConfigs,
+    required this.onButtonTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 5),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: List.generate(
+          buttonConfigs.length,
+          (index) => Padding(
+            padding: const EdgeInsets.only(left: 4.0),
+            child: Ink(
+              decoration: BoxDecoration(
+                color: buttonConfigs[index]['bgColor'],
+                borderRadius: const BorderRadius.all(Radius.circular(12)),
+              ),
+              child: Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  borderRadius: const BorderRadius.all(Radius.circular(12)),
+                  onTap: () {
+                    onButtonTap(index); // 返回按钮的索引
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Tooltip(
+                      message: buttonConfigs[index]['tooltip'],
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            width: 25,
+                            height: 25,
+                            decoration: BoxDecoration(
+                              color: buttonConfigs[index]['iconBgColor'],
+                              shape: BoxShape.circle,
+                            ),
+                            child: Center(
+                              child: Icon(
+                                buttonConfigs[index]['icon'],
+                                size: 18,
+                                color: Colors.black87,
+                              ),
+                            ),
+                          ),
+                          Text(
+                            buttonConfigs[index]['text'],
+                            style: const TextStyle(
+                              color: Colors.black87,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }
 
 class ImageCardWidget extends StatelessWidget {

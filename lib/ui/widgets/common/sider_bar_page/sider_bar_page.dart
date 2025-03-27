@@ -86,7 +86,7 @@ class SiderBarPage extends StackedView<SiderBarPageModel> {
                         ),
                       ),
                     ),
-                    SizedBox(width: 20),
+                    const SizedBox(width: 20),
                     const Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [

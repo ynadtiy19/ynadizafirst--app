@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class ShopWebView extends StatefulWidget {
@@ -45,9 +44,6 @@ class _WebviewPageState extends State<ShopWebView> {
             'https://www.theleap.co/creator/ynadtiy19/mini-course/mastering-smart-goals/take?token=RoxYHZHFy_8bXPSec0N3NA'),
       );
   }
-
-  static const MethodChannel _channel =
-      MethodChannel('com.example.webview/scroll');
 
   @override
   Widget build(BuildContext context) {

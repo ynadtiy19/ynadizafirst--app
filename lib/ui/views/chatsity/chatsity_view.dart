@@ -50,7 +50,7 @@ class ChatsityView extends StackedView<ChatsityViewModel> {
                 ? const FastCachedImage(
                     fadeInDuration: Duration(milliseconds: 123),
                     url:
-                        'https://uuunu.standard.us-east-1.oortstorage.com/b900ca8f-9f9c-436c-b5b5-a0141a3ca4f9.jpg?signature=be0fa9891a9c0c40b2d774b18702dcbc9eced61758d7091c02a36c642a45d3142c6b7a9a24aacf967644c8a8f9e47aecd7e20d7e91879c134c389bcac4ad23aa9e71c611c01b2f2b0041297c73979b47721df0f35ff183c4bd097e3cf507df91&provider=1', // 替换为你的图片URL
+                        'https://res.cloudinary.com/ddgzciyug/image/upload/v1742223901/c15e0758-5f12-44dc-9a8c-47c7e2b83a9b_vtqgil.jpg', // 替换为你的图片URL
                     fit: BoxFit.cover, // 确保图片覆盖整个背景
                   )
                 : Image.file(
@@ -268,12 +268,12 @@ class ChatsityView extends StackedView<ChatsityViewModel> {
                       // 使用自定义的 CustomGridColumn 部件
                       const CustomGridColumn(
                         imageUrls: [
-                          'https://uuunu.standard.us-east-1.oortstorage.com/Nature%20picture%20%20Nature%20photography%20%20Natural%20beauty.jpg?signature=be0fa9891a9c0c40b2d774b18702dcbc9eced61758d7091c02a36c642a45d3142c6b7a9a24aacf967644c8a8f9e47aecd7e20d7e91879c134c389bcac4ad23aa9e71c611c01b2f2b0041297c73979b47721df0f35ff183c4bd097e3cf507df91&provider=1',
-                          'https://uuunu.standard.us-east-1.oortstorage.com/9493c0d0-9f7a-4f8e-9b5a-34fa0052ca2c.jpg?signature=be0fa9891a9c0c40b2d774b18702dcbc9eced61758d7091c02a36c642a45d3142c6b7a9a24aacf967644c8a8f9e47aecd7e20d7e91879c134c389bcac4ad23aa9e71c611c01b2f2b0041297c73979b47721df0f35ff183c4bd097e3cf507df91&provider=1',
-                          'https://uuunu.standard.us-east-1.oortstorage.com/095042ea-5443-4ed7-a264-6613a3fc3be6.jpg?signature=be0fa9891a9c0c40b2d774b18702dcbc9eced61758d7091c02a36c642a45d3142c6b7a9a24aacf967644c8a8f9e47aecd7e20d7e91879c134c389bcac4ad23aa9e71c611c01b2f2b0041297c73979b47721df0f35ff183c4bd097e3cf507df91&provider=1',
-                          'https://uuunu.standard.us-east-1.oortstorage.com/42c00291-702d-434e-9d4d-3d9fe9859c84.jpg?signature=be0fa9891a9c0c40b2d774b18702dcbc9eced61758d7091c02a36c642a45d3142c6b7a9a24aacf967644c8a8f9e47aecd7e20d7e91879c134c389bcac4ad23aa9e71c611c01b2f2b0041297c73979b47721df0f35ff183c4bd097e3cf507df91&provider=1',
-                          'https://uuunu.standard.us-east-1.oortstorage.com/Nature%20picture%20%20Nature%20photography%20%20Natural%20beauty.jpg?signature=be0fa9891a9c0c40b2d774b18702dcbc9eced61758d7091c02a36c642a45d3142c6b7a9a24aacf967644c8a8f9e47aecd7e20d7e91879c134c389bcac4ad23aa9e71c611c01b2f2b0041297c73979b47721df0f35ff183c4bd097e3cf507df91&provider=1',
-                          'https://utfs.io/f/e9rePmZszdcgcNfK53MfPredhvoHpLy5a2Oi1Un9VBj4YSZI',
+                          'https://res.cloudinary.com/ddgzciyug/image/upload/v1742223299/Nature_picture_Nature_photography_Natural_beauty_l8r5by.jpg',
+                          'https://res.cloudinary.com/ddgzciyug/image/upload/v1742223299/9493c0d0-9f7a-4f8e-9b5a-34fa0052ca2c_ny8bza.jpg',
+                          'https://res.cloudinary.com/ddgzciyug/image/upload/v1742224048/e401c996-4daa-493b-9574-bf43407355a8_f8a31r.jpg',
+                          'https://res.cloudinary.com/ddgzciyug/image/upload/v1742223299/c168e777-8a6e-4dc6-a3cf-d6740c8362b7_eozjly.jpg',
+                          'https://res.cloudinary.com/ddgzciyug/image/upload/v1742223299/Nature_picture_Nature_photography_Natural_beauty_l8r5by.jpg',
+                          'https://res.cloudinary.com/ddgzciyug/image/upload/v1742224114/Telefon_duvar_ka%C4%9F%C4%B1tlar%C4%B1_hc9ac6.jpg',
                         ],
                         items: [
                           '创作',
@@ -292,7 +292,7 @@ class ChatsityView extends StackedView<ChatsityViewModel> {
                         imageUrls: const [
                           'https://sjbz-fd.zol-img.com.cn/t_s1080x1920c/g5/M00/00/02/ChMkJ1fJVACIOcDTAAmrpgi1J2QAAU9uQETzP4ACau-914.jpg',
                           'https://utfs.io/f/e9rePmZszdcgET7tYDSeQbHLKAarSm17Rl6j2dw3g0IcCYNP',
-                          'https://utfs.io/f/e9rePmZszdcgET7tYDSeQbHLKAarSm17Rl6j2dw3g0IcCYNP',
+                          'https://res.cloudinary.com/ddgzciyug/image/upload/v1742224114/Telefon_duvar_ka%C4%9F%C4%B1tlar%C4%B1_hc9ac6.jpg',
                         ],
                         cardTitles: const [
                           'Top 50 Global',
@@ -317,7 +317,7 @@ class ChatsityView extends StackedView<ChatsityViewModel> {
                         buttonText: '浏览全部',
                         imageUrls: const [
                           'https://sjbz-fd.zol-img.com.cn/t_s1080x1920c/g5/M00/00/02/ChMkJ1fJVACIOcDTAAmrpgi1J2QAAU9uQETzP4ACau-914.jpg',
-                          'https://utfs.io/f/e9rePmZszdcgCYSAVwB68En15KMm7CcRVx0pUrehv3OJqtXi',
+                          'https://res.cloudinary.com/ddgzciyug/image/upload/v1742223962/f70cbffb-6ac7-4268-9769-6849cdaf2ee9_a5ltrd.jpg',
                           'https://utfs.io/f/e9rePmZszdcgCYSAVwB68En15KMm7CcRVx0pUrehv3OJqtXi',
                         ],
                         cardTitles: const [

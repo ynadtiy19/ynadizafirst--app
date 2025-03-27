@@ -1,11 +1,11 @@
 import 'package:auto_size_text_plus/auto_size_text_plus.dart';
 import 'package:fast_cached_network_image/fast_cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:high_q_paginated_drop_down/high_q_paginated_drop_down.dart';
 import 'package:primer_progress_bar/primer_progress_bar.dart';
 import 'package:stacked/stacked.dart';
 
-import '../../common/app_colors.dart';
 import '../../utils/hero-icons-outline_icons.dart';
 import '../../widgets/common/fullscreen/fullscreen_image_viewer.dart';
 import 'pinterest_viewmodel.dart';
@@ -21,145 +21,78 @@ class PinterestView extends StackedView<PinterestViewModel> {
   ) {
     return Scaffold(
       backgroundColor: const Color.fromARGB(100, 255, 219, 205),
-      appBar: AppBar(
-        centerTitle: true,
-        backgroundColor: kcRiceYellowColor,
-        title: const Text(
-          '爱上PIN图',
-          style: TextStyle(
-            fontFamily: 'Roboto', // 使用自定义字体
-            color: teaGreen,
-            fontWeight: FontWeight.w700,
-            fontSize: 25,
-          ),
-        ),
-        actions: [
-          IconButton(
-              icon: const Icon(Hero_icons_outline.archive_box_x_mark),
-              onPressed: () {
-                viewModel.deleteGalleryImage(context);
-              }),
-          const SizedBox(width: 10),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: IconButton(
-              icon: const Icon(
-                Hero_icons_outline.magnifying_glass,
-                color: Colors.lightGreenAccent,
+      body: Column(
+        children: [
+          AnimatedCrossFade(
+            secondChild: const SizedBox.shrink(),
+            firstChild: AppBar(
+              centerTitle: true,
+              backgroundColor: Colors.transparent,
+              title: Text(
+                'Pinterest',
+                style: GoogleFonts.sacramento().copyWith(
+                  color: const Color.fromARGB(255, 5, 5, 2),
+                  fontWeight: FontWeight.bold,
+                  fontSize: 32,
+                ),
               ),
-              onPressed: () => _ushowSearchBar(context, viewModel),
+              actions: [
+                IconButton(
+                  icon: const Icon(Hero_icons_outline.archive_box_x_mark),
+                  onPressed: () {
+                    viewModel.deleteGalleryImage(context);
+                  },
+                ),
+                const SizedBox(width: 10),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: IconButton(
+                    icon: const Icon(
+                      Hero_icons_outline.magnifying_glass,
+                      color: Colors.lightGreenAccent,
+                    ),
+                    onPressed: () {
+                      _ushowSearchBar(context, viewModel);
+                    },
+                  ),
+                ),
+              ],
+            ),
+            crossFadeState: viewModel.isappbarVisible
+                ? CrossFadeState.showFirst
+                : CrossFadeState.showSecond,
+            duration: const Duration(milliseconds: 300),
+          ),
+          const SizedBox(height: 10),
+          Expanded(
+            child: ListView.builder(
+              controller: viewModel.appbarscrollController,
+              physics: const AlwaysScrollableScrollPhysics(),
+              itemCount: viewModel.imageUrls.length,
+              itemBuilder: (context, index) {
+                final imageId = viewModel.imageUrls[index];
+                final deviceWidth = MediaQuery.of(context).size.width;
+                final segmentsForImage = PinterestViewModel.segments[index];
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 14.0),
+                  child: ImageGridItem(
+                    imageId: imageId,
+                    index: index,
+                    deviceWidth: deviceWidth,
+                    segmentsForImage: segmentsForImage,
+                    onTitleTap: viewModel.translatetitleText,
+                    onTitleDoubleTap: viewModel.changetoBack,
+                    onImageSave: viewModel.saveCachedImageToGallery,
+                    viewModel: viewModel,
+                  ),
+                );
+              },
             ),
           ),
         ],
       ),
-      body: ListView.builder(
-        physics: const AlwaysScrollableScrollPhysics(),
-        itemCount: viewModel.imageUrls.length,
-        itemBuilder: (context, index) {
-          final imageId = viewModel.imageUrls[index];
-          final deviceWidth = MediaQuery.of(context).size.width;
-          final segmentsForImage = PinterestViewModel.segments[index];
-          return Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 14.0, vertical: 10.0),
-            child: ImageGridItem(
-              imageId: imageId,
-              index: index,
-              deviceWidth: deviceWidth,
-              segmentsForImage: segmentsForImage,
-              onTitleTap: viewModel.translatetitleText,
-              onTitleDoubleTap: viewModel.changetoBack,
-              onImageSave: viewModel.saveCachedImageToGallery,
-              viewModel: viewModel,
-            ),
-          );
-        },
-      ),
     );
   }
-
-  // void _showSearchBar(BuildContext context, PinterestViewModel viewModel) {
-  //   final TextEditingController searchController = TextEditingController();
-  //   final FocusNode searchFocusNode = FocusNode(); // 创建 FocusNode
-  //
-  //   showDialog(
-  //     context: context,
-  //     builder: (BuildContext dialogContext) {
-  //       // 延迟弹出键盘以便 UI 初始化完成
-  //       Future.delayed(const Duration(milliseconds: 100), () {
-  //         if (dialogContext.mounted) {
-  //           // 检查上下文是否有效
-  //           FocusScope.of(dialogContext)
-  //               .requestFocus(searchFocusNode); // 使 TextField 获取焦点并弹出键盘
-  //         }
-  //       });
-  //       return Align(
-  //         alignment: Alignment.topCenter, // 对齐到顶部
-  //         child: Padding(
-  //           padding: const EdgeInsets.only(top: 50.0), // 距离顶部的距离
-  //           child: Material(
-  //             color: Colors.transparent, // 透明背景
-  //             child: Container(
-  //               padding: const EdgeInsets.all(16.0),
-  //               color: Colors.white, // 背景颜色
-  //               child: Row(
-  //                 children: [
-  //                   Expanded(
-  //                     child: TextField(
-  //                       controller: searchController,
-  //                       focusNode: searchFocusNode, // 将 FocusNode 传递给 TextField
-  //                       textInputAction: TextInputAction.send,
-  //                       decoration: InputDecoration(
-  //                         hintText: '搜索',
-  //                         border: const OutlineInputBorder(),
-  //                         // prefixIcon: Padding(
-  //                         //   padding: const EdgeInsets.all(8.0),
-  //                         //   child: IconButton(
-  //                         //     icon: const Icon(LineIcons.search),
-  //                         //     onPressed: () {
-  //                         //       FocusManager.instance.primaryFocus?.unfocus();
-  //                         //       String query = searchController.text;
-  //                         //       if (query.isNotEmpty) {
-  //                         //         viewModel.fetchData(query).then((uuudata) {
-  //                         //           // 处理搜索结果
-  //                         //           viewModel.jsonCacheKey
-  //                         //               .refresh('fetchedData', uuudata!);
-  //                         //           viewModel.changeColor();
-  //                         //           // print('Fetched data: $uuudata');
-  //                         //         }).catchError((error) {
-  //                         //           print('Error fetching data: $error');
-  //                         //         });
-  //                         //       }
-  //                         //     },
-  //                         //   ),
-  //                         // ),
-  //                         focusedBorder: OutlineInputBorder(
-  //                           borderRadius: BorderRadius.circular(15),
-  //                           borderSide: const BorderSide(color: Colors.green),
-  //                         ),
-  //                       ),
-  //                       onSubmitted: (value) {
-  //                         Navigator.of(context).pop(); // 收起对话框
-  //                         viewModel.fetchAndParseData(value); // 执行搜索逻辑
-  //                       },
-  //                     ),
-  //                   ),
-  //                   IconButton(
-  //                     icon: Icon(Icons.cancel),
-  //                     onPressed: () {
-  //                       FocusScope.of(dialogContext).unfocus(); // 收起键盘
-  //                       Navigator.of(dialogContext).pop(); // 关闭弹窗
-  //                     },
-  //                   ),
-  //                 ],
-  //               ),
-  //             ),
-  //           ),
-  //         ),
-  //       );
-  //     },
-  //   );
-  // }
 
   void _ushowSearchBar(BuildContext context, PinterestViewModel viewModel) {
     showDialog(
@@ -404,7 +337,6 @@ class ImageGridItem extends StatelessWidget {
                         // 只有当 value 为 false 时执行保存逻辑
                         print(originalUrl);
                         await onImageSave(url);
-
                         // 显示成功的 Toast 消息
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(

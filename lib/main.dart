@@ -1,6 +1,3 @@
-import 'dart:async';
-
-import 'package:at_persistence_secondary_server/at_persistence_secondary_server.dart';
 import 'package:fast_cached_network_image/fast_cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -12,13 +9,13 @@ import 'package:hung/app/app.locator.dart';
 import 'package:hung/services/chat_message.dart';
 import 'package:hung/services/image_data.dart';
 import 'package:kplayer/kplayer.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'app_loader.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await FastCachedImageConfig.init(clearCacheAfter: const Duration(days: 15));
+
+  await FastCachedImageConfig.init(clearCacheAfter: const Duration(days: 3));
 
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,
@@ -29,15 +26,14 @@ void main() async {
     DeviceOrientation.landscapeLeft,
     DeviceOrientation.landscapeRight,
   ]);
-
   // ⚡ 推荐使用 Hive.initFlutter() 进行初始化
   await Hive.initFlutter();
 
   // ✅ 先注册所有适配器（Adapter）
   Hive.registerAdapter(ImageDataAdapter());
   Hive.registerAdapter(ChatMessageAdapter());
-  Hive.registerAdapter(CommitEntryAdapter()); // 🚀 关键：添加这个
-  Hive.registerAdapter(AtDataAdapter());
+  // Hive.registerAdapter(CommitEntryAdapter()); // 🚀 关键：添加这个
+  // Hive.registerAdapter(AtDataAdapter());
 
   // ✅ 然后再打开 Box
   // // 删除相关的 Box 数据
@@ -51,9 +47,8 @@ void main() async {
   await Hive.openBox<ChatMessage>('chatjson');
 
   EasyLoading.init();
-  await SharedPreferences.getInstance();
 
-  await setupLocator();
+  await setupLocator(); // 先注册依赖
   setupDialogUi();
   setupBottomSheetUi();
   Player.boot();
@@ -62,7 +57,7 @@ void main() async {
   configLoading();
 }
 
-Future<void> configLoading() async {
+void configLoading() {
   EasyLoading.instance
     ..maskType = EasyLoadingMaskType.none
     ..loadingStyle = EasyLoadingStyle.dark

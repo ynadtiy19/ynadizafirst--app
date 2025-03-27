@@ -87,7 +87,7 @@ class ClientchatViewModel extends ReactiveViewModel {
       } else {
         final images = await hl_picker.HLImagePickerAndroid().openPicker(
           cropping: false,
-          selectedIds: false ? [] : null,
+          selectedIds: null,
           pickerOptions: const hl_picker.HLPickerOptions(
             mediaType: MediaType.image,
             enablePreview: true,

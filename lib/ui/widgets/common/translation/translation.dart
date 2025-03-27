@@ -49,7 +49,7 @@ class _TranslationState extends State<Translation> {
   Widget build(BuildContext context) {
     // 如果translations为null或为空，显示占位文本
     if (widget.translations == null || widget.translations!.isEmpty) {
-      return Center(
+      return const Center(
         child: Text(
           'No translations available',
           style: TextStyle(color: Colors.grey, fontSize: 16),

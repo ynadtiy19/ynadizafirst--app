@@ -10,6 +10,7 @@ import 'package:at_client/at_client.dart' as _i8;
 import 'package:at_utils/at_logger.dart' as _i9;
 import 'package:flutter/material.dart' as _i2;
 import 'package:hung/services/atchatclient_service.dart' as _i7;
+import 'package:hung/services/authentication_service.dart' as _i10;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:mockito/src/dummies.dart' as _i4;
 import 'package:stacked_services/stacked_services.dart' as _i3;
@@ -857,6 +858,130 @@ class MockAtchatclientService extends _i1.Mock
             input,
             logger,
             context,
+          ],
+        ),
+        returnValue: _i5.Future<bool>.value(false),
+        returnValueForMissingStub: _i5.Future<bool>.value(false),
+      ) as _i5.Future<bool>);
+
+  @override
+  void listenToReactiveValues(List<dynamic>? reactiveValues) =>
+      super.noSuchMethod(
+        Invocation.method(
+          #listenToReactiveValues,
+          [reactiveValues],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  void addListener(void Function()? listener) => super.noSuchMethod(
+        Invocation.method(
+          #addListener,
+          [listener],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  void removeListener(void Function()? listener) => super.noSuchMethod(
+        Invocation.method(
+          #removeListener,
+          [listener],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  void notifyListeners() => super.noSuchMethod(
+        Invocation.method(
+          #notifyListeners,
+          [],
+        ),
+        returnValueForMissingStub: null,
+      );
+}
+
+/// A class which mocks [AuthenticationService].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockAuthenticationService extends _i1.Mock
+    implements _i10.AuthenticationService {
+  @override
+  bool get isLoggedIn => (super.noSuchMethod(
+        Invocation.getter(#isLoggedIn),
+        returnValue: false,
+        returnValueForMissingStub: false,
+      ) as bool);
+
+  @override
+  set isLoggedIn(bool? _isLoggedIn) => super.noSuchMethod(
+        Invocation.setter(
+          #isLoggedIn,
+          _isLoggedIn,
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  String get url => (super.noSuchMethod(
+        Invocation.getter(#url),
+        returnValue: _i4.dummyValue<String>(
+          this,
+          Invocation.getter(#url),
+        ),
+        returnValueForMissingStub: _i4.dummyValue<String>(
+          this,
+          Invocation.getter(#url),
+        ),
+      ) as String);
+
+  @override
+  int get listenersCount => (super.noSuchMethod(
+        Invocation.getter(#listenersCount),
+        returnValue: 0,
+        returnValueForMissingStub: 0,
+      ) as int);
+
+  @override
+  void changeIsLoggedIn(bool? value) => super.noSuchMethod(
+        Invocation.method(
+          #changeIsLoggedIn,
+          [value],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  _i5.Future<bool> userLoggedIn(
+    String? username,
+    String? password,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #userLoggedIn,
+          [
+            username,
+            password,
+          ],
+        ),
+        returnValue: _i5.Future<bool>.value(false),
+        returnValueForMissingStub: _i5.Future<bool>.value(false),
+      ) as _i5.Future<bool>);
+
+  @override
+  _i5.Future<bool> updateUserData(
+    String? _email,
+    String? _username,
+    String? _password,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #updateUserData,
+          [
+            _email,
+            _username,
+            _password,
           ],
         ),
         returnValue: _i5.Future<bool>.value(false),

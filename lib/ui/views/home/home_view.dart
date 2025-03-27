@@ -8,7 +8,6 @@ import 'package:zenith_snack_bar/zenith_snack_bar.dart';
 import '../../utils/hero-icons-outline_icons.dart';
 import '../../widgets/common/sider_bar_page/sider_bar_page.dart';
 import '../chatsity/chatsity_view.dart';
-import '../pinterest/pinterest_view.dart';
 import '../profile/profile_view.dart';
 import '../prompt_to_real/prompt_to_real_view.dart';
 import 'home_viewmodel.dart';
@@ -94,7 +93,7 @@ class HomeView extends StackedView<HomeViewModel> {
                                 ),
                                 Text(
                                   value,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     color: Colors.black87,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -139,11 +138,11 @@ class HomeView extends StackedView<HomeViewModel> {
                                 backgroundColor: Colors.transparent,
                                 automaticallyImplyLeading: false,
                                 flexibleSpace: CustomPaint(
-                                  size: Size.fromHeight(50 + 2 * 42.0),
+                                  size: const Size.fromHeight(50 + 2 * 42.0),
                                   painter: DiagonalStripesPainter(),
                                 ),
                                 title: Text(
-                                  'Chating Buddy',
+                                  'YnadityChat',
                                   style: GoogleFonts.abhayaLibre(
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold,
@@ -157,12 +156,12 @@ class HomeView extends StackedView<HomeViewModel> {
                                   isScrollable: true,
                                   labelColor: Colors.black,
                                   labelStyle: const TextStyle(
-                                    fontSize: 12,
+                                    fontSize: 16,
                                     fontWeight: FontWeight.bold,
                                   ),
                                   unselectedLabelColor: Colors.white54,
                                   unselectedLabelStyle: const TextStyle(
-                                    fontSize: 10,
+                                    fontSize: 16,
                                   ),
                                   tabs: [
                                     Tab(
@@ -172,7 +171,7 @@ class HomeView extends StackedView<HomeViewModel> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
                                           children: [
-                                            Text('Chating'),
+                                            Text('对话'),
                                             SizedBox(width: 4),
                                             Icon(Hero_icons_outline.sparkles),
                                           ],
@@ -186,7 +185,7 @@ class HomeView extends StackedView<HomeViewModel> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
                                           children: [
-                                            Text('Prompting'),
+                                            Text('创作'),
                                             SizedBox(width: 4),
                                             Icon(
                                                 Hero_icons_outline.paint_brush),
@@ -210,7 +209,6 @@ class HomeView extends StackedView<HomeViewModel> {
                   ),
                 ),
                 const ArticleView(),
-                const PinterestView(),
                 const ProfileView(),
                 // 其他视图...
               ],

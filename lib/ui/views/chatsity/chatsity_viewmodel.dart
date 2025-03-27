@@ -71,7 +71,7 @@ class ChatsityViewModel extends ReactiveViewModel {
     loadbackgroundImage();
     _textController.addListener(initState);
   }
-  bool get isfetchingUpdateVersion => !chatclientPlugin.uonboarded;
+  bool get isfetchingUpdateVersion => !chatclientPlugin.uonboarded; //在这里反着来
   String? get uuuavatarImagePathValue => ImageRepository.avatarImagePathValue;
 
   bool available = false;
@@ -110,9 +110,9 @@ class ChatsityViewModel extends ReactiveViewModel {
         if (status == 'listening') {
           setState(() => _isListening = true);
         }
-        if (status == 'notListening') {
-          setState(() => _isListening = false);
-        }
+        // if (status == 'notListening') {
+        //   setState(() => _isListening = false);
+        // }
         if (status == 'done') {
           if (recognizedText.isNotEmpty) {
             Navigator.pop(context);
@@ -536,7 +536,7 @@ class ChatsityViewModel extends ReactiveViewModel {
     try {
       final images = await _picker.openPicker(
         cropping: false,
-        selectedIds: false ? items.map((e) => e.id).toList() : null,
+        selectedIds: null,
         pickerOptions: const HLPickerOptions(
           mediaType: MediaType.image,
           enablePreview: true,
@@ -585,7 +585,7 @@ class ChatsityViewModel extends ReactiveViewModel {
     try {
       final images = await _picker.openPicker(
         cropping: false,
-        selectedIds: false ? items.map((e) => e.id).toList() : null,
+        selectedIds: null,
         pickerOptions: const HLPickerOptions(
           mediaType: MediaType.image,
           enablePreview: true,

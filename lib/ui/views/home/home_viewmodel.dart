@@ -8,6 +8,7 @@ import 'package:stacked_services/stacked_services.dart';
 import 'package:zenith_snack_bar/zenith_snack_bar.dart';
 
 import '../../../services/atchatclient_service.dart';
+import '../../../services/authentication_service.dart';
 import '../../../services/image_repository_service.dart';
 
 class HomeViewModel extends ReactiveViewModel {
@@ -15,6 +16,7 @@ class HomeViewModel extends ReactiveViewModel {
   final _bottomSheetService = locator<BottomSheetService>();
   final ImageRepository = locator<ImageRepositoryService>();
   final homeviewchatclientPlugin = locator<AtchatclientService>();
+  final homeauthenticationPlugin = locator<AuthenticationService>();
 
   @override
   List<ListenableServiceMixin> get listenableServices =>
@@ -49,6 +51,7 @@ class HomeViewModel extends ReactiveViewModel {
   HomeViewModel(BuildContext context) {
     print('开始初始化 HomeViewModel');
     homeviewchatclientPlugin.atauthenticateUser(context);
+    homeauthenticationPlugin.loginCheck();
   }
 
   bool get isBottomNavVisibleValue => ImageRepository.isBottomNavVisibleValue;

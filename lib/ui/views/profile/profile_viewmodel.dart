@@ -12,12 +12,11 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stacked/stacked.dart';
 
+import '../../utils/hero-icons-outline_icons.dart';
+
 class ProfileViewModel extends BaseViewModel {
   final jsonCacheMem = JsonCacheMem();
   JsonCacheMem get jsonCacheKey => jsonCacheMem;
-
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  GlobalKey<ScaffoldState> get scaffoldKey => _scaffoldKey;
 
   final GlobalKey _key = GlobalKey();
   GlobalKey get key => _key;
@@ -29,6 +28,53 @@ class ProfileViewModel extends BaseViewModel {
     initialize();
     print('初始化ProfileViewModel');
   }
+
+  late int _selectedIndex = 0; // 存储选中的按钮索引
+  int get selectedIndex => _selectedIndex;
+
+  void onTabChangeprofile(int index) {
+    _selectedIndex = index;
+    notifyListeners();
+  }
+
+  final List<Map<String, dynamic>> buttonConfigs = const [
+    {
+      'bgColor': Color.fromARGB(255, 255, 219, 205),
+      'iconBgColor': Color.fromARGB(170, 206, 96, 96),
+      'tooltip': 'pinterestImg',
+      'text': '气息',
+      'icon': Hero_icons_outline.cake,
+    },
+    {
+      'bgColor': Color.fromARGB(255, 255, 219, 205),
+      'iconBgColor': Color.fromARGB(170, 206, 96, 96),
+      'tooltip': '美食',
+      'text': '美食',
+      'icon': Hero_icons_outline.cake,
+    },
+    {
+      'bgColor': Color.fromARGB(255, 255, 219, 205),
+      'iconBgColor': Color.fromARGB(245, 245, 181, 45),
+      'tooltip': '动物',
+      'text': '动物',
+      'icon': Icons.pets,
+    },
+    {
+      'bgColor': Color.fromARGB(255, 255, 219, 205),
+      'iconBgColor': Color.fromARGB(245, 196, 208, 208),
+      'tooltip': '旅行',
+      'text': '旅行',
+      'icon': Hero_icons_outline.truck,
+    },
+    {
+      'bgColor': Color.fromARGB(255, 255, 219, 205),
+      'iconBgColor': Color.fromARGB(245, 225, 190, 231),
+      'tooltip': '家乡的风景画',
+      'text': '家乡',
+      'icon': Hero_icons_outline.gift,
+    },
+  ];
+  List<Map<String, dynamic>> get buttonConfig => buttonConfigs;
 
   Future<Uint8List?> getImageBytes(String imageUrl) async {
     final imageProvider = FastCachedImageProvider(imageUrl);

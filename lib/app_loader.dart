@@ -118,7 +118,9 @@ class _AppLoaderState extends State<AppLoader>
                   return const SizedBox.shrink();
                 }
 
-                return MyApp(data: data);
+                return MyApp(
+                  data: data,
+                );
               },
             ),
             ValueListenableBuilder(

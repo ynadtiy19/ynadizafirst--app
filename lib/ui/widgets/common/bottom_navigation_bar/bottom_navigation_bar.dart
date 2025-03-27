@@ -24,9 +24,10 @@ class MeBottomNavigationBar extends StackedView<BottomNavigationBarModel> {
         gap: 0,
         activeColor: Colors.black,
         iconSize: 24,
-        tabBorderRadius: 12,
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-        duration: Duration(milliseconds: 400),
+        tabBorderRadius: 16,
+        mainAxisAlignment: MainAxisAlignment.spaceAround, // 或使用其他合适的对齐方式
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 12),
+        duration: const Duration(milliseconds: 400),
         tabBackgroundColor: Color(kcRiceYellowColor.value),
         color: Colors.black,
         onTabChange: (index) {
@@ -50,10 +51,6 @@ class MeBottomNavigationBar extends StackedView<BottomNavigationBarModel> {
           GButton(
             icon: Hero_icons_outline.globe_europe_africa,
             text: 'Globe',
-          ),
-          GButton(
-            icon: Hero_icons_outline.users,
-            text: 'Profile',
           ),
         ],
       ),

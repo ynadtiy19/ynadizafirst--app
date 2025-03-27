@@ -23,6 +23,8 @@ import 'package:hung/ui/views/travelstory/travelstory_view.dart';
 import 'package:stacked/stacked_annotations.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:hung/ui/views/clientchat/clientchat_view.dart';
+import 'package:hung/ui/views/pantrylogin/pantrylogin_view.dart';
+import 'package:hung/services/authentication_service.dart';
 // @stacked-import
 
 @StackedApp(
@@ -44,6 +46,7 @@ import 'package:hung/ui/views/clientchat/clientchat_view.dart';
     MaterialRoute(page: PromptToSelectView),
     MaterialRoute(page: PinterestView),
     MaterialRoute(page: ClientchatView),
+    MaterialRoute(page: PantryloginView),
 // @stacked-route
   ],
   dependencies: [
@@ -54,6 +57,7 @@ import 'package:hung/ui/views/clientchat/clientchat_view.dart';
     LazySingleton(classType: ImageRepositoryService),
     LazySingleton(classType: SelectImgFavoService),
     LazySingleton(classType: AtchatclientService),
+    LazySingleton(classType: AuthenticationService),
 // @stacked-service
   ],
   bottomsheets: [

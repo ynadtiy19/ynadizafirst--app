@@ -8,6 +8,7 @@ import 'package:fast_cached_network_image/fast_cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart' show ScrollDirection;
 import 'package:high_q_paginated_drop_down/high_q_paginated_drop_down.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_gallery_saver_plus/image_gallery_saver_plus.dart';
@@ -35,7 +36,7 @@ class PinterestViewModel extends BaseViewModel with WidgetsBindingObserver {
   static List<Map<String, dynamic>> uimageUrls = [];
   List<Map<String, dynamic>> get imageUrls => uimageUrls;
 
-  static Map<int, String> _translatedTitles = {};
+  static final Map<int, String> _translatedTitles = {};
   static Map<int, String> get titles => _translatedTitles;
 
 // 在你的视图模型中，定义 segments 为一个 Map<int, List<Segment>>
@@ -96,7 +97,7 @@ class PinterestViewModel extends BaseViewModel with WidgetsBindingObserver {
   late String keyword = 'winter';
   String get uquery => keyword;
 
-  static Map<int, bool> _translationEnabled = {};
+  static final Map<int, bool> _translationEnabled = {};
   static Map<int, bool> get translationEnabled => _translationEnabled;
 
   void changedquery(String value) {
@@ -181,10 +182,22 @@ class PinterestViewModel extends BaseViewModel with WidgetsBindingObserver {
   GlobalKey<FormFieldState<int>> get dropdownFormFieldKey =>
       dropdownFormFieldKey1;
 
+  final ScrollController _appbarscrollController = ScrollController();
+  ScrollController get appbarscrollController => _appbarscrollController;
+  late bool _isappbarVisible = true; // 初始状态为显示
+  bool get isappbarVisible => _isappbarVisible;
+  double _scrollStartPosition = 0.0; // 滚动开始位置
+
+  void changeappbarVisible(bool value) {
+    _isappbarVisible = value;
+    notifyListeners();
+  }
+
   @override
   PinterestViewModel() {
     print('初始化PinterestViewModel');
     loadData();
+    _appbarscrollController.addListener(_onScroll);
   }
 
   Future<List<Map<String, dynamic>>> fetchPinterestPromoteData(String q) async {
@@ -561,4 +574,31 @@ class PinterestViewModel extends BaseViewModel with WidgetsBindingObserver {
       },
     );
   } //删除所有图片
+
+  void _onScroll() async {
+    double scrollOffset = _appbarscrollController.offset; // 获取当前滚动位置
+    double scrollDelta = scrollOffset - _scrollStartPosition; // 计算滚动距离
+    double scrollThreshold = 50.0; // 设置滚动距离阈值，可以根据需要调整
+
+    if (_appbarscrollController.position.userScrollDirection ==
+        ScrollDirection.reverse) {
+      if (_isappbarVisible && scrollDelta > scrollThreshold) {
+        changeappbarVisible(false);
+        _scrollStartPosition = scrollOffset; // 更新滚动开始位置
+      }
+    } else if (_appbarscrollController.position.userScrollDirection ==
+        ScrollDirection.forward) {
+      if (!_isappbarVisible && scrollDelta < -scrollThreshold) {
+        changeappbarVisible(true);
+        _scrollStartPosition = scrollOffset; // 更新滚动开始位置
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    _appbarscrollController.removeListener(_onScroll);
+    _appbarscrollController.dispose();
+    super.dispose();
+  }
 }

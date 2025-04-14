@@ -31,8 +31,8 @@ class ChatsityView extends StackedView<ChatsityViewModel> {
     Widget? child,
   ) {
     return Scaffold(
-      resizeToAvoidBottomInset: true,
-      backgroundColor: const Color.fromARGB(255, 216, 219, 231),
+      resizeToAvoidBottomInset: false,
+      backgroundColor: Colors.transparent,
       extendBodyBehindAppBar: true, // 允许内容衍生进入appbar后面
       appBar: MyCustomAppBar(
         onAvatarTap: () {
@@ -168,8 +168,8 @@ class ChatsityView extends StackedView<ChatsityViewModel> {
                             child: Align(
                               alignment: Alignment.center,
                               child: Container(
-                                width: screenWidth(context) / 2 - 4,
-                                height: screenWidth(context) / 2 - 4,
+                                width: screenWidth(context) * 0.725,
+                                height: screenWidth(context) * 0.725,
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
                                   image: DecorationImage(
@@ -185,7 +185,7 @@ class ChatsityView extends StackedView<ChatsityViewModel> {
                                 child: Center(
                                   child: CustomPaint(
                                     painter: CircleBorderWithGlow(
-                                      color: Colors.white,
+                                      color: Colors.amber[100]!,
                                       strokeWidth: 2,
                                       glowRadius: 5, // 光晕半径
                                     ),
@@ -271,7 +271,7 @@ class ChatsityView extends StackedView<ChatsityViewModel> {
                           'https://res.cloudinary.com/ddgzciyug/image/upload/v1742223299/Nature_picture_Nature_photography_Natural_beauty_l8r5by.jpg',
                           'https://res.cloudinary.com/ddgzciyug/image/upload/v1742223299/9493c0d0-9f7a-4f8e-9b5a-34fa0052ca2c_ny8bza.jpg',
                           'https://res.cloudinary.com/ddgzciyug/image/upload/v1742224048/e401c996-4daa-493b-9574-bf43407355a8_f8a31r.jpg',
-                          'https://res.cloudinary.com/ddgzciyug/image/upload/v1742223299/c168e777-8a6e-4dc6-a3cf-d6740c8362b7_eozjly.jpg',
+                          'https://res.cloudinary.com/ddgzciyug/image/upload/v1742223962/f70cbffb-6ac7-4268-9769-6849cdaf2ee9_a5ltrd.jpg',
                           'https://res.cloudinary.com/ddgzciyug/image/upload/v1742223299/Nature_picture_Nature_photography_Natural_beauty_l8r5by.jpg',
                           'https://res.cloudinary.com/ddgzciyug/image/upload/v1742224114/Telefon_duvar_ka%C4%9F%C4%B1tlar%C4%B1_hc9ac6.jpg',
                         ],
@@ -290,7 +290,7 @@ class ChatsityView extends StackedView<ChatsityViewModel> {
                         title: 'ChatGPT',
                         buttonText: '浏览全部',
                         imageUrls: const [
-                          'https://sjbz-fd.zol-img.com.cn/t_s1080x1920c/g5/M00/00/02/ChMkJ1fJVACIOcDTAAmrpgi1J2QAAU9uQETzP4ACau-914.jpg',
+                          'https://res.cloudinary.com/ddgzciyug/image/upload/v1742223901/c15e0758-5f12-44dc-9a8c-47c7e2b83a9b_vtqgil.jpg',
                           'https://utfs.io/f/e9rePmZszdcgET7tYDSeQbHLKAarSm17Rl6j2dw3g0IcCYNP',
                           'https://res.cloudinary.com/ddgzciyug/image/upload/v1742224114/Telefon_duvar_ka%C4%9F%C4%B1tlar%C4%B1_hc9ac6.jpg',
                         ],
@@ -316,7 +316,7 @@ class ChatsityView extends StackedView<ChatsityViewModel> {
                         title: 'Google Gemini',
                         buttonText: '浏览全部',
                         imageUrls: const [
-                          'https://sjbz-fd.zol-img.com.cn/t_s1080x1920c/g5/M00/00/02/ChMkJ1fJVACIOcDTAAmrpgi1J2QAAU9uQETzP4ACau-914.jpg',
+                          'https://res.cloudinary.com/ddgzciyug/image/upload/v1742223901/c15e0758-5f12-44dc-9a8c-47c7e2b83a9b_vtqgil.jpg',
                           'https://res.cloudinary.com/ddgzciyug/image/upload/v1742223962/f70cbffb-6ac7-4268-9769-6849cdaf2ee9_a5ltrd.jpg',
                           'https://utfs.io/f/e9rePmZszdcgCYSAVwB68En15KMm7CcRVx0pUrehv3OJqtXi',
                         ],

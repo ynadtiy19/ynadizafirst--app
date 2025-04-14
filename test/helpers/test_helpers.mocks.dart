@@ -705,11 +705,11 @@ class MockDialogService extends _i1.Mock implements _i3.DialogService {
 class MockAtchatclientService extends _i1.Mock
     implements _i7.AtchatclientService {
   @override
-  set subscription(_i5.StreamSubscription<dynamic>? _subscription) =>
+  set uuusubscription(_i5.StreamSubscription<dynamic>? _uuusubscription) =>
       super.noSuchMethod(
         Invocation.setter(
-          #subscription,
-          _subscription,
+          #uuusubscription,
+          _uuusubscription,
         ),
         returnValueForMissingStub: null,
       );
@@ -951,6 +951,16 @@ class MockAuthenticationService extends _i1.Mock
         ),
         returnValueForMissingStub: null,
       );
+
+  @override
+  _i5.Future<bool> loginCheck() => (super.noSuchMethod(
+        Invocation.method(
+          #loginCheck,
+          [],
+        ),
+        returnValue: _i5.Future<bool>.value(false),
+        returnValueForMissingStub: _i5.Future<bool>.value(false),
+      ) as _i5.Future<bool>);
 
   @override
   _i5.Future<bool> userLoggedIn(

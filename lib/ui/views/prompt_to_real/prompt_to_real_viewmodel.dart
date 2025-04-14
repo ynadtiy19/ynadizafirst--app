@@ -24,6 +24,12 @@ class PromptToRealViewModel extends ReactiveViewModel {
   final TextEditingController _query = TextEditingController();
   TextEditingController get query => _query;
 
+  void setQuery(String query) {
+    _query.clear();
+    _query.text = query;
+    notifyListeners();
+  }
+
   final ImageRepository = locator<ImageRepositoryService>();
   Box<ImageData> get uuimageBox => ImageRepository.imagesBox;
 
@@ -384,46 +390,31 @@ class PromptToRealViewModel extends ReactiveViewModel {
       return;
     }
 
-    // 随机延迟
     final random = Random();
     await Future.delayed(Duration(seconds: random.nextInt(5) + 1));
 
     try {
-      // 获取模型 ID
-      final modelResponse = await http.get(
-        Uri.parse(apiUrl + 'key/api/v1/models'),
+      // 获取 pipeline_id
+      final pipelineResponse = await http.get(
+        Uri.parse('${apiUrl}key/api/v1/pipelines'),
         headers: {
           'X-Key': 'Key $apiKey',
           'X-Secret': 'Secret $secretKey',
-          'Accept': '*/*',
-          'Accept-Encoding': 'gzip, deflate, br, zstd',
-          'Connection': 'keep-alive',
-          'Content-Type': 'application/json',
-          'User-Agent':
-              'Mozilla/5.0 (Linux; Android 11; Pixel 4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Mobile Safari/537.36',
-          'Origin': 'https://mydiumtify.globeapp.dev',
-          'Referer': 'https://mydiumtify.globeapp.dev/',
-          'sec-ch-ua':
-              '"Chromium";v="89", "Google Chrome";v="89", "Not:A-Brand";v="99"',
-          'sec-ch-ua-mobile': '?1',
-          'sec-ch-ua-platform': '"Android"',
         },
       );
 
-      if (modelResponse.statusCode != 200) {
-        print('Error getting model ID: ${modelResponse.statusCode}');
-        throw Exception('Failed to load models');
+      if (pipelineResponse.statusCode != 200) {
+        throw Exception('Failed to load pipelines');
       }
 
-      final modelData = jsonDecode(modelResponse.body) as List;
-      print('Model data: $modelData'); // Log the model data
-
-      if (modelData.isEmpty || modelData[0]['id'] == null) {
-        throw Exception('Model ID is not found or no models found');
+      final pipelineData = jsonDecode(pipelineResponse.body) as List;
+      if (pipelineData.isEmpty || pipelineData[0]['id'] == null) {
+        throw Exception('Pipeline ID not found');
       }
-      final modelId = modelData[0]['id'].toString(); // Convert ID to string
 
-      // 生成图像
+      final pipelineId = pipelineData[0]['id'].toString();
+
+      // 准备请求参数
       final params = {
         'type': 'GENERATE',
         'numImages': 1,
@@ -434,48 +425,30 @@ class PromptToRealViewModel extends ReactiveViewModel {
 
       final request = http.MultipartRequest(
         'POST',
-        Uri.parse(apiUrl + 'key/api/v1/text2image/run'),
+        Uri.parse('${apiUrl}key/api/v1/pipeline/run'),
       )
-        ..fields['model_id'] = modelId
+        ..headers.addAll({
+          'X-Key': 'Key $apiKey',
+          'X-Secret': 'Secret $secretKey',
+        })
+        ..fields['pipeline_id'] = pipelineId
         ..files.add(http.MultipartFile.fromString(
           'params',
           jsonEncode(params),
           contentType: MediaType('application', 'json'),
-        ))
-        ..headers.addAll({
-          'X-Key': 'Key $apiKey',
-          'X-Secret': 'Secret $secretKey',
-          'Accept': '*/*',
-          'Accept-Encoding': 'gzip, deflate, br, zstd',
-          'Connection': 'keep-alive',
-          'Content-Type': 'application/json',
-          'User-Agent':
-              'Mozilla/5.0 (Linux; Android 11; Pixel 4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Mobile Safari/537.36',
-          'Origin': 'https://mydiumtify.globeapp.dev',
-          'Referer': 'https://mydiumtify.globeapp.dev/',
-          'sec-ch-ua':
-              '"Chromium";v="89", "Google Chrome";v="89", "Not:A-Brand";v="99"',
-          'sec-ch-ua-mobile': '?1',
-          'sec-ch-ua-platform': '"Android"',
-        });
+        ));
 
       final generateResponse = await request.send();
       final generateData = await http.Response.fromStream(generateResponse);
 
-      final responseBody = generateData.body;
-      print('Generate response: $responseBody'); // Log the generate response
-
       if (generateData.statusCode != 201) {
-        throw Exception('Failed to generate image: ${generateData.statusCode}');
+        throw Exception('Failed to generate: ${generateData.statusCode}');
       }
 
-      final generateJson =
-          jsonDecode(generateData.body) as Map<String, dynamic>;
-      if (generateJson['uuid'] is! String) {
-        throw Exception('UUID is not a string');
-      }
-
+      final generateJson = jsonDecode(generateData.body);
       final uuid = generateJson['uuid'] as String;
+
+      print('UUID: $uuid');
 
       // 检查生成状态
       int attempts = 10;
@@ -484,26 +457,22 @@ class PromptToRealViewModel extends ReactiveViewModel {
 
       while (attempts > 0) {
         final statusResponse = await http.get(
-          Uri.parse(apiUrl + 'key/api/v1/text2image/status/$uuid'),
+          Uri.parse('${apiUrl}key/api/v1/pipeline/status/$uuid'),
           headers: {
             'X-Key': 'Key $apiKey',
             'X-Secret': 'Secret $secretKey',
-            'User-Agent': 'Custom User-Agent ${random.nextInt(1000)}'
+            'User-Agent': 'Custom-UA-${random.nextInt(1000)}',
           },
         );
 
         if (statusResponse.statusCode != 200) {
-          throw Exception('Failed to get status');
+          throw Exception('Failed to get generation status');
         }
 
-        final statusData =
-            jsonDecode(statusResponse.body) as Map<String, dynamic>;
-
+        final statusData = jsonDecode(statusResponse.body);
         if (statusData['status'] == 'DONE') {
-          if (statusData['images'] is! List) {
-            throw Exception('Images data is not a list');
-          }
-          images = List<String>.from(statusData['images'] as List);
+          final files = statusData['result']['files'];
+          images = List<String>.from(files);
           break;
         }
 
@@ -512,8 +481,152 @@ class PromptToRealViewModel extends ReactiveViewModel {
       }
 
       updateImages(images);
-    } catch (error) {
-      print('Error: $error');
+    } catch (e) {
+      print('Error: $e');
     }
   }
+
+// Future<void> _generateSingleImage(
+  //   String apiKey,
+  //   String secretKey,
+  //   Function(List<String>) updateImages,
+  // ) async {
+  //   final prompt = _query.text;
+  //   if (prompt.isEmpty) {
+  //     print('Prompt is empty');
+  //     return;
+  //   }
+  //
+  //   // 随机延迟
+  //   final random = Random();
+  //   await Future.delayed(Duration(seconds: random.nextInt(5) + 1));
+  //
+  //   try {
+  //     // 获取模型 ID
+  //     final modelResponse = await http.get(
+  //       Uri.parse(apiUrl + 'key/api/v1/models'),
+  //       headers: {
+  //         'X-Key': 'Key $apiKey',
+  //         'X-Secret': 'Secret $secretKey',
+  //         'Accept': '*/*',
+  //         'Accept-Encoding': 'gzip, deflate, br, zstd',
+  //         'Connection': 'keep-alive',
+  //         'Content-Type': 'application/json',
+  //         'User-Agent':
+  //             'Mozilla/5.0 (Linux; Android 11; Pixel 4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Mobile Safari/537.36',
+  //         'Origin': 'https://mydiumtify.globeapp.dev',
+  //         'Referer': 'https://mydiumtify.globeapp.dev/',
+  //         'sec-ch-ua':
+  //             '"Chromium";v="89", "Google Chrome";v="89", "Not:A-Brand";v="99"',
+  //         'sec-ch-ua-mobile': '?1',
+  //         'sec-ch-ua-platform': '"Android"',
+  //       },
+  //     );
+  //
+  //     if (modelResponse.statusCode != 200) {
+  //       print('Error getting model ID: ${modelResponse.statusCode}');
+  //       throw Exception('Failed to load models');
+  //     }
+  //
+  //     final modelData = jsonDecode(modelResponse.body) as List;
+  //     print('Model data: $modelData'); // Log the model data
+  //
+  //     if (modelData.isEmpty || modelData[0]['id'] == null) {
+  //       throw Exception('Model ID is not found or no models found');
+  //     }
+  //     final modelId = modelData[0]['id'].toString(); // Convert ID to string
+  //
+  //     // 生成图像
+  //     final params = {
+  //       'type': 'GENERATE',
+  //       'numImages': 1,
+  //       'width': 1024,
+  //       'height': 1024,
+  //       'generateParams': {'query': prompt},
+  //     };
+  //
+  //     final request = http.MultipartRequest(
+  //       'POST',
+  //       Uri.parse(apiUrl + 'key/api/v1/text2image/run'),
+  //     )
+  //       ..fields['model_id'] = modelId
+  //       ..files.add(http.MultipartFile.fromString(
+  //         'params',
+  //         jsonEncode(params),
+  //         contentType: MediaType('application', 'json'),
+  //       ))
+  //       ..headers.addAll({
+  //         'X-Key': 'Key $apiKey',
+  //         'X-Secret': 'Secret $secretKey',
+  //         'Accept': '*/*',
+  //         'Accept-Encoding': 'gzip, deflate, br, zstd',
+  //         'Connection': 'keep-alive',
+  //         'Content-Type': 'application/json',
+  //         'User-Agent':
+  //             'Mozilla/5.0 (Linux; Android 11; Pixel 4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Mobile Safari/537.36',
+  //         'Origin': 'https://mydiumtify.globeapp.dev',
+  //         'Referer': 'https://mydiumtify.globeapp.dev/',
+  //         'sec-ch-ua':
+  //             '"Chromium";v="89", "Google Chrome";v="89", "Not:A-Brand";v="99"',
+  //         'sec-ch-ua-mobile': '?1',
+  //         'sec-ch-ua-platform': '"Android"',
+  //       });
+  //
+  //     final generateResponse = await request.send();
+  //     final generateData = await http.Response.fromStream(generateResponse);
+  //
+  //     final responseBody = generateData.body;
+  //     print('Generate response: $responseBody'); // Log the generate response
+  //
+  //     if (generateData.statusCode != 201) {
+  //       throw Exception('Failed to generate image: ${generateData.statusCode}');
+  //     }
+  //
+  //     final generateJson =
+  //         jsonDecode(generateData.body) as Map<String, dynamic>;
+  //     if (generateJson['uuid'] is! String) {
+  //       throw Exception('UUID is not a string');
+  //     }
+  //
+  //     final uuid = generateJson['uuid'] as String;
+  //
+  //     // 检查生成状态
+  //     int attempts = 10;
+  //     const delay = Duration(seconds: 10);
+  //     List<String> images = [];
+  //
+  //     while (attempts > 0) {
+  //       final statusResponse = await http.get(
+  //         Uri.parse(apiUrl + 'key/api/v1/text2image/status/$uuid'),
+  //         headers: {
+  //           'X-Key': 'Key $apiKey',
+  //           'X-Secret': 'Secret $secretKey',
+  //           'User-Agent': 'Custom User-Agent ${random.nextInt(1000)}'
+  //         },
+  //       );
+  //
+  //       if (statusResponse.statusCode != 200) {
+  //         throw Exception('Failed to get status');
+  //       }
+  //
+  //       final statusData =
+  //           jsonDecode(statusResponse.body) as Map<String, dynamic>;
+  //
+  //       if (statusData['status'] == 'DONE') {
+  //         if (statusData['images'] is! List) {
+  //           throw Exception('Images data is not a list');
+  //         }
+  //         images = List<String>.from(statusData['images'] as List);
+  //         break;
+  //       }
+  //
+  //       attempts -= 1;
+  //       await Future.delayed(delay);
+  //     }
+  //
+  //     updateImages(images);
+  //   } catch (error) {
+  //     print('Error: $error');
+  //   }
+  // }
 }

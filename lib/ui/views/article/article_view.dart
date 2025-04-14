@@ -61,7 +61,7 @@ class ArticleView extends StackedView<ArticleViewModel> {
               FocusScope.of(context).unfocus();
             },
             child: Scaffold(
-              backgroundColor: const Color.fromARGB(255, 216, 219, 231),
+              backgroundColor: const Color.fromARGB(100, 255, 219, 205),
               body: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Stack(

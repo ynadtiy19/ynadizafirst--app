@@ -10,6 +10,7 @@ import '../../widgets/common/sider_bar_page/sider_bar_page.dart';
 import '../chatsity/chatsity_view.dart';
 import '../profile/profile_view.dart';
 import '../prompt_to_real/prompt_to_real_view.dart';
+import '../sesame/sesame_view.dart';
 import 'home_viewmodel.dart';
 
 class HomeView extends StackedView<HomeViewModel> {
@@ -113,7 +114,7 @@ class HomeView extends StackedView<HomeViewModel> {
               index: viewModel.uuuindex,
               children: <Widget>[
                 DefaultTabController(
-                  length: 2,
+                  length: 3,
                   child: GestureDetector(
                     onTap: () {
                       FocusScope.of(context).unfocus();
@@ -192,6 +193,20 @@ class HomeView extends StackedView<HomeViewModel> {
                                           ],
                                         ),
                                       ),
+                                    ),
+                                    Tab(
+                                      child: Container(
+                                        alignment: Alignment.center,
+                                        child: const Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text('语音'),
+                                            SizedBox(width: 4),
+                                            Icon(Hero_icons_outline.trophy),
+                                          ],
+                                        ),
+                                      ),
                                     )
                                   ],
                                 ),
@@ -203,6 +218,7 @@ class HomeView extends StackedView<HomeViewModel> {
                         children: [
                           ChatsityView(),
                           PromptToRealView(),
+                          SesameView(),
                         ],
                       ),
                     ),

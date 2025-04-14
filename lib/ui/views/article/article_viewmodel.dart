@@ -88,12 +88,9 @@ class ArticleViewModel extends ReactiveViewModel {
     'Design',
   ];
   List<dynamic> get encategories => _encategories;
-  final foregroundImages = ['rio.png', 'france.png', 'iceland.png'];
-  final backgroundImages = ['rio-bg.jpg', 'france-bg.jpg', 'iceland-bg.jpg'];
-  final texts = ['巴西', '法国', '冰岛'];
 
   Future<bool> fetchPromoteData(bool usureTotranslate) async {
-    final url = Uri.parse('https://labs.writingmate.ai/api/chat/public');
+    final url = Uri.parse('https://chat.writingmate.ai/api/chat/public');
     _isfetching = true;
     // 构建请求头
     final headers = {
@@ -152,13 +149,24 @@ class ArticleViewModel extends ReactiveViewModel {
         {
           "role": "system",
           "content":
-              "Your task is to create two arrays of 10 relevant search tags for each of the following categories: Life, Travel, Technology, Sales, and Personal Development. The first array should contain English tags, and the second should be the corresponding Chinese tags, directly matching each English tag in the order provided. These tags should capture the essence of each category, allowing users to easily explore related topics. Ensure the tags are concise, varied, and without the '#' prefix. Include a mix of both short (two or four words) and longer tags (up to three or four words) to provide diversity. Generate tags as follows:\n\n1. Life (e.g., nature,Lifestyle, Family, Wellness, Minimalism, Health)\n2. Travel (e.g., Adventure, Backpacking, Culture, Exotic Destinations, Roadtrip)\n3. Technology (e.g., AI, Innovation, Gadgets, Programming, Robotics)\n4. Sales (e.g., Marketing, E-commerce, Strategy, Branding, Negotiation)\n5. Personal Development (e.g., Mindfulness, Leadership, Productivity, SelfGrowth, Motivation)\n\nFor each category, provide both English and corresponding Chinese tags in the following format:\n\nEnglish Tags:\n- [English tags for Life]\n- [English tags for Travel]\n- [English tags for Technology]\n- [English tags for Sales]\n- [English tags for Personal Development]\n\nChinese Tags:\n- [Chinese tags for Life]\n- [Chinese tags for Travel]\n- [Chinese tags for Technology]\n- [Chinese tags for Sales]\n- [Chinese tags for Personal Development]"
+              '''你是一个标签生成引擎，需要基于以下五个常见领域：Life, Travel, Technology, Sales, 和 Personal Development，分别生成每类 10 个英文搜索标签及其对应中文翻译，标签内容无需使用具体的名词或事物，仅通过隐含表达引导出人们在生活中普遍关心、探索、体验、成长、转变等行为意图所对应的关键词。例如：对生活的热爱、对远方的向往、对技术变化的好奇、对交易的策略、对自我成长的渴望等。The first array should contain English tags, and the second should be the corresponding Chinese tags,
+
+    标签要简洁、具启发性、具搜索价值，可以包含 1~4 个词，涵盖短词与长词的多样性，不带 # 符号。输出格式如下：
+
+    English Tags:
+    - [English tags for Life]
+    - [English tags for Travel]
+    - [English tags for Technology]
+    - [English tags for Sales]
+    - [English tags for Personal Development]
+
+    Chinese Tags:
+    - [Chinese tags for Life]
+    - [Chinese tags for Travel]
+    - [Chinese tags for Technology]
+    - [Chinese tags for Sales]
+    - [Chinese tags for Personal Development]'''
         }
-        // {
-        //   "role": "user",
-        //   "content":
-        //       "Create $number captivating image prompts tailored for $model. Each prompt should:\n            1. Begin with an engaging verb like \"Imagine\", \"Illustrate\", \"Capture\", etc.\n            2. Range between 10 and 20 words, weaving a tapestry of visual storytelling.\n            3. Clearly express the image ratio as \"square ($Ratio)\" at the forefront of each prompt.\n            4. Highlight the style: photorealistic, to evoke realism and depth.\n            5. Include the enchanting theme: $text, symbolizing serenity and flow.\n            6. Utilize clear, straightforward language to ensure understanding.\n            7. Emphasize key elements and details that resonate with beauty and thoughtfulness.\n            8. Adhere to best practices for Midjourney prompts, crafting images that inspire awe."
-        // }
       ]
     });
 

@@ -25,6 +25,7 @@ import 'package:stacked_services/stacked_services.dart';
 import 'package:hung/ui/views/clientchat/clientchat_view.dart';
 import 'package:hung/ui/views/pantrylogin/pantrylogin_view.dart';
 import 'package:hung/services/authentication_service.dart';
+import 'package:hung/ui/views/sesame/sesame_view.dart';
 // @stacked-import
 
 @StackedApp(
@@ -47,6 +48,7 @@ import 'package:hung/services/authentication_service.dart';
     MaterialRoute(page: PinterestView),
     MaterialRoute(page: ClientchatView),
     MaterialRoute(page: PantryloginView),
+    MaterialRoute(page: SesameView),
 // @stacked-route
   ],
   dependencies: [

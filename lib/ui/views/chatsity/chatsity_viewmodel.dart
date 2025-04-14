@@ -689,7 +689,7 @@ class ChatsityViewModel extends ReactiveViewModel {
   }
 
   Future<void> UchatwithHistory(String text) async {
-    final url = Uri.parse('https://labs.writingmate.ai/api/chat/public');
+    final url = Uri.parse('https://chat.writingmate.ai/api/chat/public');
     _isfetching = true;
     isNeedTypingIndicator = true;
 

@@ -88,6 +88,8 @@ dependencies:
   kplayer: ^0.4.2
   custom_button_builder: ^0.0.4
   speech_to_text: ^7.0.0
+  fepe_record: ^6.1.5
+  smart_encrypt: ^1.0.8
 
 
 
@@ -104,6 +106,7 @@ flutter:
   assets:
     - images/
     - images/avatars/
+    - images/sesame.json
     - assets/audios/
     - .env
     - riv/

@@ -62,7 +62,7 @@ class PromptToRealView extends StackedView<PromptToRealViewModel> {
                       icon: const Icon(Hero_icons_outline.light_bulb),
                       color: Colors.grey,
                       onPressed: () {
-                        _showCustomDialog(context);
+                        _showCustomDialog(context, viewModel);
                       },
                     ),
                   ),
@@ -550,7 +550,8 @@ class PromptToRealView extends StackedView<PromptToRealViewModel> {
     );
   } //删除所有图片
 
-  void _showCustomDialog(BuildContext context) {
+  void _showCustomDialog(
+      BuildContext context, PromptToRealViewModel viewModel) {
     showDialog(
       context: context,
       barrierDismissible: true, // 点击对话框外部区域可以关闭
@@ -564,9 +565,16 @@ class PromptToRealView extends StackedView<PromptToRealViewModel> {
                 borderRadius: BorderRadius.circular(55), // 设置圆角
               ),
               backgroundColor: Colors.transparent,
-              child: const Align(
+              child: Align(
                 alignment: Alignment.center,
-                child: SimpleScrollView(),
+                child: SimpleScrollView(
+                  updateImages: (String prompt) {
+                    if (prompt.isNotEmpty) {
+                      viewModel.setQuery(prompt);
+                      Navigator.of(context).pop();
+                    }
+                  },
+                ),
               ),
             ),
           ),

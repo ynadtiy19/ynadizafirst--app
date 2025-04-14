@@ -614,6 +614,14 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.2.0"
+  fepe_record:
+    dependency: "direct main"
+    description:
+      name: fepe_record
+      sha256: "2f54ef72ba3d15625ece20e21adac90de5960e4416efad1971fbf4b900e73ffa"
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "6.1.5"
   ffi:
     dependency: transitive
     description:
@@ -1826,6 +1834,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  smart_encrypt:
+    dependency: "direct main"
+    description:
+      name: smart_encrypt
+      sha256: b0c80924dc668c63b94a3944f098dd05a38d3e45b7cec992fd3b90c0bda05c09
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.0.8"
   smooth_page_indicator:
     dependency: "direct main"
     description:

@@ -141,11 +141,7 @@ class PromotetowordsViewModel extends BaseViewModel {
       String text, String model, String number, String Ratio) async {
     isfetching = true;
     // 设置请求 URL
-    final url = Uri.parse('https://labs.writingmate.ai/api/chat/public');
-    // print(text);
-    // print(model);
-    // print(number);
-    // print(Ratio);
+    final url = Uri.parse('https://chat.writingmate.ai/api/chat/public');
     prompts = [];
 
     // 构建请求头

@@ -201,7 +201,7 @@ class PinterestViewModel extends BaseViewModel with WidgetsBindingObserver {
   }
 
   Future<List<Map<String, dynamic>>> fetchPinterestPromoteData(String q) async {
-    final url = Uri.parse('https://labs.writingmate.ai/api/chat/public');
+    final url = Uri.parse('https://chat.writingmate.ai/api/chat/public');
 
     // 构建请求头
     final headers = {

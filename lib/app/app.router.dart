@@ -5,8 +5,8 @@
 // **************************************************************************
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:flutter/foundation.dart' as _i21;
-import 'package:flutter/material.dart' as _i20;
+import 'package:flutter/foundation.dart' as _i22;
+import 'package:flutter/material.dart' as _i21;
 import 'package:flutter/material.dart';
 import 'package:hung/ui/views/article/article_view.dart' as _i4;
 import 'package:hung/ui/views/chat/chat_view.dart' as _i5;
@@ -26,13 +26,14 @@ import 'package:hung/ui/views/prompt_to_select/prompt_to_select_view.dart'
     as _i16;
 import 'package:hung/ui/views/prompt_to_translate/prompt_to_translate_view.dart'
     as _i11;
+import 'package:hung/ui/views/sesame/sesame_view.dart' as _i20;
 import 'package:hung/ui/views/startup/startup_view.dart' as _i3;
 import 'package:hung/ui/views/storyly_instagram/storyly_instagram_view.dart'
     as _i7;
 import 'package:hung/ui/views/travelcard/travelcard_view.dart' as _i8;
 import 'package:hung/ui/views/travelstory/travelstory_view.dart' as _i9;
 import 'package:stacked/stacked.dart' as _i1;
-import 'package:stacked_services/stacked_services.dart' as _i22;
+import 'package:stacked_services/stacked_services.dart' as _i23;
 
 class Routes {
   static const homeView = '/home-view';
@@ -71,6 +72,8 @@ class Routes {
 
   static const pantryloginView = '/pantrylogin-view';
 
+  static const sesameView = '/sesame-view';
+
   static const all = <String>{
     homeView,
     startupView,
@@ -90,6 +93,7 @@ class Routes {
     pinterestView,
     clientchatView,
     pantryloginView,
+    sesameView,
   };
 }
 
@@ -167,68 +171,72 @@ class StackedRouter extends _i1.RouterBase {
       Routes.pantryloginView,
       page: _i19.PantryloginView,
     ),
+    _i1.RouteDef(
+      Routes.sesameView,
+      page: _i20.SesameView,
+    ),
   ];
 
   final _pagesMap = <Type, _i1.StackedRouteFactory>{
     _i2.HomeView: (data) {
-      return _i20.MaterialPageRoute<dynamic>(
+      return _i21.MaterialPageRoute<dynamic>(
         builder: (context) => const _i2.HomeView(),
         settings: data,
       );
     },
     _i3.StartupView: (data) {
-      return _i20.MaterialPageRoute<dynamic>(
+      return _i21.MaterialPageRoute<dynamic>(
         builder: (context) => const _i3.StartupView(),
         settings: data,
       );
     },
     _i4.ArticleView: (data) {
-      return _i20.MaterialPageRoute<dynamic>(
+      return _i21.MaterialPageRoute<dynamic>(
         builder: (context) => const _i4.ArticleView(),
         settings: data,
       );
     },
     _i5.ChatView: (data) {
-      return _i20.MaterialPageRoute<dynamic>(
+      return _i21.MaterialPageRoute<dynamic>(
         builder: (context) => const _i5.ChatView(),
         settings: data,
       );
     },
     _i6.ProfileView: (data) {
-      return _i20.MaterialPageRoute<dynamic>(
+      return _i21.MaterialPageRoute<dynamic>(
         builder: (context) => const _i6.ProfileView(),
         settings: data,
       );
     },
     _i7.StorylyInstagramView: (data) {
-      return _i20.MaterialPageRoute<dynamic>(
+      return _i21.MaterialPageRoute<dynamic>(
         builder: (context) => const _i7.StorylyInstagramView(),
         settings: data,
       );
     },
     _i8.TravelcardView: (data) {
       final args = data.getArgs<TravelcardViewArguments>(nullOk: false);
-      return _i20.MaterialPageRoute<dynamic>(
+      return _i21.MaterialPageRoute<dynamic>(
         builder: (context) => _i8.TravelcardView(
             scrollController: args.scrollController, key: args.key),
         settings: data,
       );
     },
     _i9.TravelstoryView: (data) {
-      return _i20.MaterialPageRoute<dynamic>(
+      return _i21.MaterialPageRoute<dynamic>(
         builder: (context) => const _i9.TravelstoryView(),
         settings: data,
       );
     },
     _i10.PromptToRealView: (data) {
-      return _i20.MaterialPageRoute<dynamic>(
+      return _i21.MaterialPageRoute<dynamic>(
         builder: (context) => const _i10.PromptToRealView(),
         settings: data,
       );
     },
     _i11.PromptToTranslateView: (data) {
       final args = data.getArgs<PromptToTranslateViewArguments>(nullOk: false);
-      return _i20.MaterialPageRoute<dynamic>(
+      return _i21.MaterialPageRoute<dynamic>(
         builder: (context) => _i11.PromptToTranslateView(
             scrollController: args.scrollController, key: args.key),
         settings: data,
@@ -236,14 +244,14 @@ class StackedRouter extends _i1.RouterBase {
     },
     _i12.PromotetowordsView: (data) {
       final args = data.getArgs<PromotetowordsViewArguments>(nullOk: false);
-      return _i20.MaterialPageRoute<dynamic>(
+      return _i21.MaterialPageRoute<dynamic>(
         builder: (context) => _i12.PromotetowordsView(
             scrollController: args.scrollController, key: args.key),
         settings: data,
       );
     },
     _i13.ChatsityView: (data) {
-      return _i20.MaterialPageRoute<dynamic>(
+      return _i21.MaterialPageRoute<dynamic>(
         builder: (context) => const _i13.ChatsityView(),
         settings: data,
       );
@@ -251,39 +259,45 @@ class StackedRouter extends _i1.RouterBase {
     _i14.PromptToQueryFavoriteView: (data) {
       final args =
           data.getArgs<PromptToQueryFavoriteViewArguments>(nullOk: false);
-      return _i20.MaterialPageRoute<dynamic>(
+      return _i21.MaterialPageRoute<dynamic>(
         builder: (context) => _i14.PromptToQueryFavoriteView(
             scrollController: args.scrollController, key: args.key),
         settings: data,
       );
     },
     _i15.PromptToFavoPageView: (data) {
-      return _i20.MaterialPageRoute<dynamic>(
+      return _i21.MaterialPageRoute<dynamic>(
         builder: (context) => const _i15.PromptToFavoPageView(),
         settings: data,
       );
     },
     _i16.PromptToSelectView: (data) {
-      return _i20.MaterialPageRoute<dynamic>(
+      return _i21.MaterialPageRoute<dynamic>(
         builder: (context) => const _i16.PromptToSelectView(),
         settings: data,
       );
     },
     _i17.PinterestView: (data) {
-      return _i20.MaterialPageRoute<dynamic>(
+      return _i21.MaterialPageRoute<dynamic>(
         builder: (context) => const _i17.PinterestView(),
         settings: data,
       );
     },
     _i18.ClientchatView: (data) {
-      return _i20.MaterialPageRoute<dynamic>(
+      return _i21.MaterialPageRoute<dynamic>(
         builder: (context) => const _i18.ClientchatView(),
         settings: data,
       );
     },
     _i19.PantryloginView: (data) {
-      return _i20.MaterialPageRoute<dynamic>(
+      return _i21.MaterialPageRoute<dynamic>(
         builder: (context) => const _i19.PantryloginView(),
+        settings: data,
+      );
+    },
+    _i20.SesameView: (data) {
+      return _i21.MaterialPageRoute<dynamic>(
+        builder: (context) => const _i20.SesameView(),
         settings: data,
       );
     },
@@ -302,9 +316,9 @@ class TravelcardViewArguments {
     this.key,
   });
 
-  final _i20.ScrollController scrollController;
+  final _i21.ScrollController scrollController;
 
-  final _i21.Key? key;
+  final _i22.Key? key;
 
   @override
   String toString() {
@@ -329,9 +343,9 @@ class PromptToTranslateViewArguments {
     this.key,
   });
 
-  final _i20.ScrollController scrollController;
+  final _i21.ScrollController scrollController;
 
-  final _i21.Key? key;
+  final _i22.Key? key;
 
   @override
   String toString() {
@@ -356,9 +370,9 @@ class PromotetowordsViewArguments {
     this.key,
   });
 
-  final _i20.ScrollController scrollController;
+  final _i21.ScrollController scrollController;
 
-  final _i21.Key? key;
+  final _i22.Key? key;
 
   @override
   String toString() {
@@ -383,9 +397,9 @@ class PromptToQueryFavoriteViewArguments {
     this.key,
   });
 
-  final _i20.ScrollController scrollController;
+  final _i21.ScrollController scrollController;
 
-  final _i21.Key? key;
+  final _i22.Key? key;
 
   @override
   String toString() {
@@ -404,7 +418,7 @@ class PromptToQueryFavoriteViewArguments {
   }
 }
 
-extension NavigatorStateExtension on _i22.NavigationService {
+extension NavigatorStateExtension on _i23.NavigationService {
   Future<dynamic> navigateToHomeView([
     int? routerId,
     bool preventDuplicates = true,
@@ -490,8 +504,8 @@ extension NavigatorStateExtension on _i22.NavigationService {
   }
 
   Future<dynamic> navigateToTravelcardView({
-    required _i20.ScrollController scrollController,
-    _i21.Key? key,
+    required _i21.ScrollController scrollController,
+    _i22.Key? key,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -536,8 +550,8 @@ extension NavigatorStateExtension on _i22.NavigationService {
   }
 
   Future<dynamic> navigateToPromptToTranslateView({
-    required _i20.ScrollController scrollController,
-    _i21.Key? key,
+    required _i21.ScrollController scrollController,
+    _i22.Key? key,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -554,8 +568,8 @@ extension NavigatorStateExtension on _i22.NavigationService {
   }
 
   Future<dynamic> navigateToPromotetowordsView({
-    required _i20.ScrollController scrollController,
-    _i21.Key? key,
+    required _i21.ScrollController scrollController,
+    _i22.Key? key,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -586,8 +600,8 @@ extension NavigatorStateExtension on _i22.NavigationService {
   }
 
   Future<dynamic> navigateToPromptToQueryFavoriteView({
-    required _i20.ScrollController scrollController,
-    _i21.Key? key,
+    required _i21.ScrollController scrollController,
+    _i22.Key? key,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -667,6 +681,20 @@ extension NavigatorStateExtension on _i22.NavigationService {
         transition,
   ]) async {
     return navigateTo<dynamic>(Routes.pantryloginView,
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> navigateToSesameView([
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  ]) async {
+    return navigateTo<dynamic>(Routes.sesameView,
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,
@@ -758,8 +786,8 @@ extension NavigatorStateExtension on _i22.NavigationService {
   }
 
   Future<dynamic> replaceWithTravelcardView({
-    required _i20.ScrollController scrollController,
-    _i21.Key? key,
+    required _i21.ScrollController scrollController,
+    _i22.Key? key,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -804,8 +832,8 @@ extension NavigatorStateExtension on _i22.NavigationService {
   }
 
   Future<dynamic> replaceWithPromptToTranslateView({
-    required _i20.ScrollController scrollController,
-    _i21.Key? key,
+    required _i21.ScrollController scrollController,
+    _i22.Key? key,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -822,8 +850,8 @@ extension NavigatorStateExtension on _i22.NavigationService {
   }
 
   Future<dynamic> replaceWithPromotetowordsView({
-    required _i20.ScrollController scrollController,
-    _i21.Key? key,
+    required _i21.ScrollController scrollController,
+    _i22.Key? key,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -854,8 +882,8 @@ extension NavigatorStateExtension on _i22.NavigationService {
   }
 
   Future<dynamic> replaceWithPromptToQueryFavoriteView({
-    required _i20.ScrollController scrollController,
-    _i21.Key? key,
+    required _i21.ScrollController scrollController,
+    _i22.Key? key,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -935,6 +963,20 @@ extension NavigatorStateExtension on _i22.NavigationService {
         transition,
   ]) async {
     return replaceWith<dynamic>(Routes.pantryloginView,
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> replaceWithSesameView([
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  ]) async {
+    return replaceWith<dynamic>(Routes.sesameView,
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,

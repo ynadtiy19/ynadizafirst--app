@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:auto_size_text_plus/auto_size_text_plus.dart';
 import 'package:fast_cached_network_image/fast_cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter/services.dart';
 import 'package:high_q_paginated_drop_down/high_q_paginated_drop_down.dart';
+import 'package:http/http.dart' as http;
 import 'package:primer_progress_bar/primer_progress_bar.dart';
 import 'package:stacked/stacked.dart';
 
@@ -21,72 +24,71 @@ class PinterestView extends StackedView<PinterestViewModel> {
   ) {
     return Scaffold(
       backgroundColor: const Color.fromARGB(100, 255, 219, 205),
-      body: Column(
-        children: [
-          AnimatedCrossFade(
-            secondChild: const SizedBox.shrink(),
-            firstChild: AppBar(
-              centerTitle: true,
+      body: CustomScrollView(
+        slivers: [
+          // 显示 SliverAppBar 取代 CrossFade AppBar
+          if (viewModel.isappbarVisible)
+            SliverAppBar(
               backgroundColor: Colors.transparent,
-              title: Text(
-                'Pinterest',
-                style: GoogleFonts.sacramento().copyWith(
-                  color: const Color.fromARGB(255, 5, 5, 2),
-                  fontWeight: FontWeight.bold,
-                  fontSize: 32,
+              floating: true,
+              snap: true,
+              elevation: 0,
+              toolbarHeight: 60,
+              flexibleSpace: Container(
+                alignment: Alignment.centerRight,
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    IconButton(
+                      icon: const Icon(Hero_icons_outline.archive_box_x_mark),
+                      onPressed: () {
+                        viewModel.deleteGalleryImage(context);
+                      },
+                    ),
+                    const SizedBox(width: 10),
+                    IconButton(
+                      icon: const Icon(
+                        Hero_icons_outline.magnifying_glass,
+                        color: Colors.lightGreenAccent,
+                      ),
+                      onPressed: () {
+                        _ushowSearchBar(context, viewModel);
+                      },
+                    ),
+                  ],
                 ),
               ),
-              actions: [
-                IconButton(
-                  icon: const Icon(Hero_icons_outline.archive_box_x_mark),
-                  onPressed: () {
-                    viewModel.deleteGalleryImage(context);
-                  },
-                ),
-                const SizedBox(width: 10),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: IconButton(
-                    icon: const Icon(
-                      Hero_icons_outline.magnifying_glass,
-                      color: Colors.lightGreenAccent,
-                    ),
-                    onPressed: () {
-                      _ushowSearchBar(context, viewModel);
-                    },
-                  ),
-                ),
-              ],
             ),
-            crossFadeState: viewModel.isappbarVisible
-                ? CrossFadeState.showFirst
-                : CrossFadeState.showSecond,
-            duration: const Duration(milliseconds: 300),
-          ),
-          const SizedBox(height: 10),
-          Expanded(
-            child: ListView.builder(
-              controller: viewModel.appbarscrollController,
-              physics: const AlwaysScrollableScrollPhysics(),
-              itemCount: viewModel.imageUrls.length,
-              itemBuilder: (context, index) {
+          // 顶部间距
+          const SliverToBoxAdapter(child: SizedBox(height: 10)),
+          // SliverList 替代 ListView.builder
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (context, index) {
                 final imageId = viewModel.imageUrls[index];
                 final deviceWidth = MediaQuery.of(context).size.width;
                 final segmentsForImage = PinterestViewModel.segments[index];
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 14.0),
-                  child: ImageGridItem(
-                    imageId: imageId,
-                    index: index,
-                    deviceWidth: deviceWidth,
-                    segmentsForImage: segmentsForImage,
-                    onTitleTap: viewModel.translatetitleText,
-                    onTitleDoubleTap: viewModel.changetoBack,
-                    onImageSave: viewModel.saveCachedImageToGallery,
-                    viewModel: viewModel,
+                  child: Column(
+                    children: [
+                      ImageGridItem(
+                        imageId: imageId,
+                        index: index,
+                        deviceWidth: deviceWidth,
+                        segmentsForImage: segmentsForImage,
+                        onTitleTap: viewModel.translatetitleText,
+                        onTitleDoubleTap: viewModel.changetoBack,
+                        onImageSave: viewModel.saveCachedImageToGallery,
+                        viewModel: viewModel,
+                      ),
+                      const SizedBox(height: 8.0),
+                    ],
                   ),
                 );
               },
+              childCount: viewModel.imageUrls.length,
             ),
           ),
         ],
@@ -258,11 +260,33 @@ class ImageGridItem extends StatelessWidget {
     required this.viewModel,
   }) : super(key: key);
 
+  Future<String?> fetchGeneratedText(String imageUrl, String query) async {
+    final uri = Uri.parse(
+      'https://mydiumtify.globeapp.dev/chatadvance?imgurl=$imageUrl&q=$query',
+    );
+
+    try {
+      final response = await http.get(uri);
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> data = jsonDecode(response.body);
+        return data['generated_text'];
+      } else {
+        print('请求失败：${response.statusCode}');
+      }
+    } catch (e) {
+      print('请求出错：$e');
+    }
+
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     final String url = imageId['url'] as String;
     final String originalUrl = imageId['original'] as String;
     final String title = imageId['title'] as String;
+    bool istodes = false;
 
     return Material(
       color: const Color.fromARGB(255, 221, 233, 233), // 设置Material背景颜色
@@ -405,6 +429,92 @@ class ImageGridItem extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 8.0),
+              Padding(
+                padding: const EdgeInsets.only(left: 24),
+                child: ConstrainedBox(
+                  constraints:
+                      const BoxConstraints(maxWidth: 120, minWidth: 50),
+                  child: StatefulBuilder(
+                    builder: (context, setState) {
+                      return IntrinsicWidth(
+                        child: Ink(
+                          decoration: BoxDecoration(
+                            color: const Color.fromARGB(255, 255, 219, 205),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Material(
+                            color: Colors.transparent,
+                            child: InkWell(
+                              borderRadius: BorderRadius.circular(12),
+                              onTap: istodes
+                                  ? null
+                                  : () async {
+                                      setState(() {
+                                        istodes = true;
+                                      });
+                                      final description =
+                                          await fetchGeneratedText(originalUrl,
+                                                  "使用语言是中文语言，这张图片有什么") ??
+                                              "暂无描述";
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) =>
+                                            ImageDescriptionDialog(
+                                          imageUrl: url,
+                                          description: description,
+                                        ),
+                                      );
+                                      setState(() {
+                                        istodes = false;
+                                      });
+                                    },
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 8, vertical: 6),
+                                child: Tooltip(
+                                  message: istodes ? '生成描述中...' : '描写',
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Container(
+                                        height: 25,
+                                        width: 25,
+                                        decoration: const BoxDecoration(
+                                          color: Color.fromARGB(
+                                              245, 225, 190, 231),
+                                          shape: BoxShape.circle,
+                                        ),
+                                        child: Icon(
+                                          istodes
+                                              ? Hero_icons_outline.gift
+                                              : Hero_icons_outline
+                                                  .globe_europe_africa,
+                                          size: 18,
+                                          color: Colors.black87,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 6),
+                                      Text(
+                                        istodes ? '生成描述中' : '描写',
+                                        style: const TextStyle(
+                                          color: Colors.black87,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 8.0),
               Container(
                 height: 1.5,
                 color: Colors.brown.shade300,
@@ -412,6 +522,132 @@ class ImageGridItem extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class ImageDescriptionDialog extends StatelessWidget {
+  final String imageUrl;
+  final String description;
+
+  const ImageDescriptionDialog({
+    super.key,
+    required this.imageUrl,
+    required this.description,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    const double imageHeight = 180;
+    final List<String> hashtags = RegExp(r"#\S+")
+        .allMatches(description)
+        .map((match) => match.group(0)!)
+        .toList();
+
+    final String cleanedDescription =
+        description.replaceAll(RegExp(r"#\S+"), '').trim();
+
+    return Dialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      backgroundColor: Colors.white,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          /// 顶部图片
+          ClipRRect(
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(12),
+              topRight: Radius.circular(12),
+            ),
+            child: FastCachedImage(
+              url: imageUrl,
+              height: imageHeight,
+              width: double.infinity,
+              fit: BoxFit.cover,
+            ),
+          ),
+
+          /// 描述文本区域
+          GestureDetector(
+            onTap: () async {
+              await Clipboard.setData(ClipboardData(text: cleanedDescription));
+              HapticFeedback.lightImpact();
+              if (context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('描述已复制'),
+                    duration: Duration(seconds: 1),
+                  ),
+                );
+              }
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    cleanedDescription,
+                    style: const TextStyle(fontSize: 14, color: Colors.black87),
+                  ),
+                  const SizedBox(height: 12),
+
+                  /// 标签区域
+                  if (hashtags.isNotEmpty)
+                    Wrap(
+                      alignment: WrapAlignment.start,
+                      spacing: 8,
+                      runSpacing: 6,
+                      children: hashtags
+                          .map(
+                            (tag) => Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 6),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFEFF1F3),
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: Text(
+                                tag,
+                                style: const TextStyle(
+                                  color: Colors.black87,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          )
+                          .toList(),
+                    ),
+                  const SizedBox(height: 20),
+
+                  /// 按钮区域
+                  GestureDetector(
+                    onTap: () => Navigator.of(context).pop(),
+                    child: Container(
+                      height: 48,
+                      width: double.infinity,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: const Text(
+                        'Got it',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

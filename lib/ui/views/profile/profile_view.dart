@@ -2,6 +2,7 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:fast_cached_network_image/fast_cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:gpt_markdown/gpt_markdown.dart';
 import 'package:hung/ui/views/pinterest/pinterest_view.dart';
 import 'package:lottie/lottie.dart';
@@ -49,79 +50,98 @@ class ProfileView extends StackedView<ProfileViewModel> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 12.0),
+                    child: Text(
+                      'Pinterest',
+                      style: GoogleFonts.sacramento().copyWith(
+                        color: const Color.fromARGB(255, 5, 5, 2),
+                        fontWeight: FontWeight.bold,
+                        fontSize: 32,
+                      ),
+                    ),
+                  ),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 4.0),
-                        child: Ink(
-                          decoration: const BoxDecoration(
-                            color: Color.fromARGB(255, 255, 219, 205),
-                            borderRadius: BorderRadius.all(Radius.circular(12)),
-                          ),
-                          child: Material(
-                            color: Colors.transparent,
-                            child: InkWell(
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(12)),
-                              onTap: () async {
-                                // await DefaultCacheManager().emptyCache();
-                                print('清除缓存成功');
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Tooltip(
-                                  message: '搜索故事',
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Container(
-                                        width: 25, // 圆形容器的宽度
-                                        height: 25, // 圆形容器的高度
-                                        decoration: BoxDecoration(
-                                          color: const Color.fromARGB(
-                                              170, 206, 96, 96), // 背景颜色
-                                          shape: BoxShape.circle, // 圆形
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color: Colors.grey
-                                                  .withOpacity(0.5), // 阴影颜色
-                                              spreadRadius: 2, // 阴影扩散范围
-                                              blurRadius: 4, // 模糊程度
-                                              offset:
-                                                  const Offset(0, 2), // 阴影偏移
+                      Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: 4.0),
+                            child: Ink(
+                              decoration: const BoxDecoration(
+                                color: Color.fromARGB(255, 255, 219, 205),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(12)),
+                              ),
+                              child: Material(
+                                color: Colors.transparent,
+                                child: InkWell(
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(12)),
+                                  onTap: () async {
+                                    // await DefaultCacheManager().emptyCache();
+                                    print('清除缓存成功');
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Tooltip(
+                                      message: '搜索故事',
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Container(
+                                            width: 25, // 圆形容器的宽度
+                                            height: 25, // 圆形容器的高度
+                                            decoration: BoxDecoration(
+                                              color: const Color.fromARGB(
+                                                  170, 206, 96, 96), // 背景颜色
+                                              shape: BoxShape.circle, // 圆形
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: Colors.grey
+                                                      .withOpacity(0.5), // 阴影颜色
+                                                  spreadRadius: 2, // 阴影扩散范围
+                                                  blurRadius: 4, // 模糊程度
+                                                  offset: const Offset(
+                                                      0, 2), // 阴影偏移
+                                                ),
+                                              ],
                                             ),
-                                          ],
-                                        ),
-                                        child: const Center(
-                                          child: Icon(
-                                            Hero_icons_outline
-                                                .magnifying_glass, // 图标
-                                            size: 18, // 图标大小
-                                            color: Colors.black87, // 图标颜色
+                                            child: const Center(
+                                              child: Icon(
+                                                Hero_icons_outline
+                                                    .magnifying_glass, // 图标
+                                                size: 18, // 图标大小
+                                                color: Colors.black87, // 图标颜色
+                                              ),
+                                            ),
                                           ),
-                                        ),
+                                        ],
                                       ),
-                                    ],
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      TodoViewMenu(
-                        destinations: TodoViewMenuDestination.values.toList(),
-                        onSelected: (TodoViewMenuDestination destination) {
-                          // 处理菜单项选择
-                          switch (destination) {
-                            default:
-                              print('Unknown Action');
-                              break;
-                          }
-                        },
+                          const SizedBox(width: 12),
+                          TodoViewMenu(
+                            destinations:
+                                TodoViewMenuDestination.values.toList(),
+                            onSelected: (TodoViewMenuDestination destination) {
+                              // 处理菜单项选择
+                              switch (destination) {
+                                default:
+                                  print('Unknown Action');
+                                  break;
+                              }
+                            },
+                          ),
+                        ],
                       ),
                     ],
                   ),

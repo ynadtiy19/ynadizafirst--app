@@ -1,7 +1,7 @@
 name: hung
 description: A able chatbot made by LUDEYU,check out.
 publish_to: 'none'
-version: 0.5.3
+version: 0.6.3
 
 environment:
   sdk: '>=3.0.3 <4.0.0'

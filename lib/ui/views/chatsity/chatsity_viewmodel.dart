@@ -688,6 +688,15 @@ class ChatsityViewModel extends ReactiveViewModel {
     notifyListeners();
   }
 
+  void savegoogledes(String url, String des) {
+    final desmessage = ChatMessage(isSender: true, text: des, imagePath: null);
+    final imessage = ChatMessage(
+        isSender: false, text: "请欣赏来自labs.google生成的图像🤎🍒🌸", imagePath: url);
+    _chatBox.add(desmessage);
+    _chatBox.add(imessage);
+    notifyListeners();
+  }
+
   Future<void> UchatwithHistory(String text) async {
     final url = Uri.parse('https://chat.writingmate.ai/api/chat/public');
     _isfetching = true;

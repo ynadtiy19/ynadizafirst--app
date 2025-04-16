@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:auto_size_text_plus/auto_size_text_plus.dart';
 import 'package:avatar_glow/avatar_glow.dart';
@@ -9,7 +11,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_advanced_avatar/flutter_advanced_avatar.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:hung/ui/widgets/common/fullscreen/src/fullscreen_image_viewer.dart';
+import 'package:image_gallery_saver_plus/image_gallery_saver_plus.dart';
 import 'package:listview_screenshot/listview_screenshot.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:pretty_animated_buttons/widgets/pretty_shadow_button.dart';
 import 'package:stacked/stacked.dart';
 
@@ -17,6 +22,7 @@ import '../../../services/chat_message.dart';
 import '../../common/ui_helpers.dart';
 import '../../utils/hero-icons-outline_icons.dart';
 import '../../widgets/common/popmenu/gptdropdown.dart';
+import 'TaskForm.dart';
 import 'bubbletext.dart';
 import 'chatmessagebar.dart';
 import 'chatsity_viewmodel.dart';
@@ -30,6 +36,7 @@ class ChatsityView extends StackedView<ChatsityViewModel> {
     ChatsityViewModel viewModel,
     Widget? child,
   ) {
+    bool uisprocessing = false;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.transparent,
@@ -74,6 +81,7 @@ class ChatsityView extends StackedView<ChatsityViewModel> {
                               viewModel.uuuisNeedTypingIndicator,
                           shotKey: viewModel.shotKey,
                           routeToTextPage: viewModel.routeTotextPage,
+                          isgenerating: uisprocessing,
                         );
                       },
                     ),
@@ -479,7 +487,45 @@ class ChatsityView extends StackedView<ChatsityViewModel> {
                                   print('文字转语音');
                                   break;
                                 case TodoViewMenuDestination.editList:
-                                  print('获取更新版本');
+                                  showModalBottomSheet(
+                                    context: context,
+                                    isScrollControlled: true,
+                                    shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.vertical(
+                                          top: Radius.circular(20)),
+                                    ),
+                                    builder: (context) => Padding(
+                                      padding: EdgeInsets.only(
+                                        bottom: MediaQuery.of(context)
+                                            .viewInsets
+                                            .bottom,
+                                      ),
+                                      child: SingleChildScrollView(
+                                        child: StatefulBuilder(
+                                            builder: (context, setState) {
+                                          return Container(
+                                            padding: const EdgeInsets.all(16),
+                                            child: TaskForm(
+                                              onFormSubmitted:
+                                                  (isgooglegenerate) {
+                                                setState(() {
+                                                  uisprocessing =
+                                                      isgooglegenerate;
+                                                });
+                                              },
+                                              onImageGenerated:
+                                                  (String url, String des) {
+                                                viewModel.savegoogledes(
+                                                    url, des);
+                                                Navigator.pop(context);
+                                              }, // Pass callback
+                                            ),
+                                          );
+                                        }),
+                                      ),
+                                    ),
+                                  );
+                                  print('获取google图片');
                                   break;
                                 default:
                                   print('Unknown Action');
@@ -1492,6 +1538,7 @@ class ChatListView extends StatefulWidget {
   final ScrollController scrollController;
   final bool isFetching;
   final bool isNeedTypingIndicator;
+  final bool isgenerating;
   final GlobalKey shotKey;
   final ChatsityViewModel chatsityViewModel;
   final Function(String, BuildContext) routeToTextPage;
@@ -1502,6 +1549,7 @@ class ChatListView extends StatefulWidget {
     required this.scrollController,
     required this.isFetching,
     required this.isNeedTypingIndicator,
+    required this.isgenerating,
     required this.shotKey,
     required this.routeToTextPage,
     required this.chatsityViewModel,
@@ -1551,6 +1599,49 @@ class ChatListViewState extends State<ChatListView> {
             curve: Curves.easeInCirc);
   }
 
+  Future<Uint8List?> getImageBytes(String imageUrl) async {
+    final imageProvider = FastCachedImageProvider(imageUrl);
+    final imageStream = imageProvider.resolve(ImageConfiguration.empty);
+
+    Completer<Uint8List?> completer = Completer<Uint8List?>();
+
+    imageStream.addListener(
+        ImageStreamListener((ImageInfo info, bool synchronousCall) async {
+      final byteData = await info.image.toByteData(format: ImageByteFormat.png);
+      final bytes = byteData?.buffer.asUint8List();
+      completer.complete(bytes); // 完成 Future 并返回图像字节数据
+    }));
+
+    return completer.future; // 返回 Future
+  }
+
+  Future<void> saveCachedImageToGallery(String url) async {
+    try {
+      // 从缓存中获取图片文件
+      final bytes = await getImageBytes(url);
+      if (bytes!.isEmpty) {
+        print('No cached image found for URL: $url');
+        return;
+      }
+
+      // 请求存储权限
+      var status = await Permission.storage.request();
+      if (status.isGranted) {
+        // 保存图片到相册
+        await ImageGallerySaverPlus.saveImage(
+          bytes,
+          quality: 100,
+          name: '云雨之洲✨✨✨_${DateTime.now().millisecondsSinceEpoch}',
+        );
+        print('Image saved to gallery from cache');
+      } else {
+        print("Permission Denied");
+      }
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -1580,8 +1671,13 @@ class ChatListViewState extends State<ChatListView> {
                 seenStatus = true;
               }
 
-              return _buildMessageItem(message, seenStatus,
-                  isNeedTypingIndicator, widget.chatsityViewModel, index);
+              return _buildMessageItem(
+                  message,
+                  seenStatus,
+                  isNeedTypingIndicator,
+                  widget.isgenerating,
+                  widget.chatsityViewModel,
+                  index);
             },
           ),
         ),
@@ -1602,15 +1698,71 @@ class ChatListViewState extends State<ChatListView> {
       ChatMessage message,
       bool seenStatus,
       bool isNeedTypingIndicator,
+      bool isgenerateing,
       ChatsityViewModel chatsityViewModel,
       int index) {
     return Column(
       mainAxisSize: MainAxisSize.max,
       children: [
+        if (isgenerateing)
+          const SizedBox(
+            width: double.infinity, // 占满整行宽度
+            height: 50, // 可以根据需求设置合适的高度
+            child: Align(
+              alignment: Alignment.centerLeft, // 文字靠左
+              child: Padding(
+                padding:
+                    EdgeInsets.symmetric(horizontal: 16.0), // 给左边一点 padding 更美观
+                child: Text('加载中...'),
+              ),
+            ),
+          ),
         if (message.imagePath != null)
           BubbleNormalImage(
+            isSender: message.isSender,
+            onTap: () {
+              FullscreenImageViewer.open(
+                context: context,
+                child: FastCachedImage(
+                  fadeInDuration: const Duration(milliseconds: 123),
+                  url: message.imagePath!,
+                  fit: BoxFit.contain,
+                ),
+                closeWidget: const Icon(Hero_icons_outline.x_mark), // 关闭按钮
+                saveWidget:
+                    const Icon(Hero_icons_outline.heart), // 如果需要保存按钮可以传入
+                onTap: () async {
+                  // 只有当 value 为 false 时执行保存逻辑
+                  await saveCachedImageToGallery(message.imagePath!);
+                  // 显示成功的 Toast 消息
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: const Row(
+                        children: [
+                          Icon(
+                            Hero_icons_outline.check_badge,
+                            color: Colors.white,
+                          ),
+                          SizedBox(width: 8),
+                          Text(
+                            "Google生成的图像已经保存到相册中.",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ],
+                      ),
+                      backgroundColor: Colors.green,
+                      duration: const Duration(milliseconds: 2350),
+                      behavior: SnackBarBehavior.floating,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15.0),
+                      ),
+                    ),
+                  );
+                },
+              );
+            },
             id: 'image_$index', // 使用索引生成唯一 ID
-            image: Image.file(File(message.imagePath!)),
+            image: _buildImageWidget(message.imagePath!), // 用方法构建 image 参数
             color: Colors.purpleAccent,
             seen: seenStatus,
             delivered: true,
@@ -1644,5 +1796,25 @@ class ChatListViewState extends State<ChatListView> {
         ),
       ],
     );
+  }
+
+  Widget _buildImageWidget(String path) {
+    final isUrl = RegExp(r'^(http|https):\/\/').hasMatch(path);
+    if (isUrl) {
+      return FastCachedImage(
+        url: path,
+        loadingBuilder: (context, url) => const Center(
+            child: CircularProgressIndicator(
+          color: Colors.green,
+        )),
+        errorBuilder: (context, error, stackTrace) {
+          return const Center(child: Icon(Icons.broken_image));
+        },
+      );
+    } else {
+      return Image.file(
+        File(path),
+      );
+    }
   }
 }

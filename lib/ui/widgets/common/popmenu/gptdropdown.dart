@@ -247,7 +247,7 @@ class TodoViewMenu extends StatelessWidget {
       TodoViewMenuDestination.microphone => '语音转文字',
       TodoViewMenuDestination.divider => '',
       TodoViewMenuDestination.sparkles => '文本转语音',
-      TodoViewMenuDestination.editList => '更新',
+      TodoViewMenuDestination.editList => 'Google图片生成',
     };
   }
 }

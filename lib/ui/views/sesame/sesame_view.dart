@@ -231,8 +231,10 @@ class PcmSoundAppState extends State<PcmSoundApp>
                               const RecordConfig(
                                 encoder: AudioEncoder.pcm16bits,
                                 numChannels: 1,
-                                sampleRate: 16000,
+                                sampleRate: 16500,
                                 echoCancel: true,
+                                noiseSuppress: true,
+                                bitRate: 96000,
                               ),
                             );
                             stream.listen(

@@ -1,18 +1,20 @@
-name: Build Release APK on Push
-
-on:
-  push:
-    branches:
-      - main
-
 jobs:
   build:
-    name: Build APK (Release)
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Cache Gradle
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle
+            ~/.gradle/wrapper/
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
 
       - name: Set up Java
         uses: actions/setup-java@v3

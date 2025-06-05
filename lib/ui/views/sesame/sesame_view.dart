@@ -5,6 +5,7 @@ import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data'; // 直接导入 BytesBuilder
 
+import 'package:buffered_list_stream/buffered_list_stream.dart';
 import 'package:fepe_record/record.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -85,6 +86,7 @@ class PcmSoundAppState extends State<PcmSoundApp>
   int ringWidthFactorDirection = 1;
   double ringWidthFactorSpeed = 0.02;
   double randomFactor = 0;
+  int desiredChunkSize = 1024;
 
   // 用于定时刷新动画
   late final Ticker _ticker;
@@ -227,7 +229,8 @@ class PcmSoundAppState extends State<PcmSoundApp>
                         if (!Platform.isWindows) {
                           if (await record.hasPermission() &&
                               Platform.isAndroid) {
-                            final stream = await record.startStream(
+                            final Stream<Uint8List> originalAudioStream =
+                                await record.startStream(
                               const RecordConfig(
                                 encoder: AudioEncoder.pcm16bits,
                                 numChannels: 1,
@@ -237,11 +240,14 @@ class PcmSoundAppState extends State<PcmSoundApp>
                                 bitRate: 96000,
                               ),
                             );
-                            stream.listen(
+                            final Stream<List<int>> bufferedAudioStream =
+                                bufferedListStream(
+                                    originalAudioStream, desiredChunkSize);
+                            bufferedAudioStream.listen(
                               (chunk) {
-                                client.sendAudioData(chunk);
+                                client.sendAudioData(Uint8List.fromList(chunk));
                                 setState(() {
-                                  chunkSize = '环境声音: ${chunk.lengthInBytes} 字节';
+                                  chunkSize = '环境声音: ${chunk.length} 字节';
                                 });
                                 debugPrint(chunkSize);
                               },
@@ -658,7 +664,9 @@ class WebSocketClient {
         // }
         // 解码 base64 编码的音频数据
         var audioBytes = base64Decode(audioData);
-        print("长度是 ${audioBytes.length}");
+        if (kDebugMode) {
+          print("长度是 ${audioBytes.length}");
+        }
         // pcmtowave.run(audioBytes);
 
         // audioQueue.add(audioBytes); // 添加新数据

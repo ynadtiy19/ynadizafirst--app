@@ -82,8 +82,8 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false  // 禁用混淆
-            shrinkResources false
+            minifyEnabled true  // 禁用混淆
+            shrinkResources true
             signingConfig = signingConfigs.debug
         }
     }
